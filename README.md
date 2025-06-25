@@ -1,1 +1,141 @@
-# Software-Development
+# GCC compilation and useful commands for coding
+For C++ we have to use "g++", for C use "gcc"
+
+## Preprocessing -E
+```bash
+g++ -E main.cpp -o main.i   
+```
+(or)
+```bash	
+g++ main.cpp -o main.i -E
+```
+-E for Preprocessing, -o output file option
+
+## Compiling -S
+```bash
+g++ -S main.i -o main.s   
+```
+(or)
+```bash          	
+g++ main.i -o main.s -S
+```
+
+## Assembling -c
+```bash
+g++ -c main.s -o main.o   
+```
+(or)
+```bash  	
+g++ main.s -o main.o -c
+```
+
+## Linking
+```bash
+g++ main.o -o main.out
+```
+## Other Methods
+```bash
+g++ -c main.cpp -o main.o	
+```
+To create an object file from source file
+```bash
+g++  main.o -o main.out	
+```
+To create an executable from object file
+```bash
+g++ main.cpp
+```
+To create a executable directly from source file and default executable name is a.out
+## Compiler Optimisation
+```bash
+g++ main.cpp -o compiler_opt_0 -O0  	
+```
+compiler optimization flag at the end as O0
+```bash
+g++ main.cpp -o compiler_opt_1 -O1	
+```
+compiler optimization flag at the end as O1
+
+## Useful Commands
+### Time
+```bash
+Time ./compiler_opt_0	
+```
+Time is a command in a linux to run the program and show the resources used by it
+
+### Objdump
+```bash
+Objdump -D main.out	
+```
+Objdump is a linux command to analyze the object file, use objdumb --help to see list of available options. -D will disassemble all sections of object code
+
+### ldd
+```bash
+ldd main.out
+```
+ldd prints the shared object dependencies
+
+### nm
+```bash
+nm -D libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so
+```
+nm will List a symbols from object files, -D means dynamic
+```bash
+nm main.o
+```
+Displays symbols in the main.o file
+### ld
+ld is a GNU linker
+
+### clang-format
+```bash
+clang-format <filename>	
+```
+To align the format of the code. We can install the clang using 
+```bash 
+sudo apt-get install clang-format
+```
+We can align the code in different style using the --style option
+```bash
+clang-format <filename> --style=file
+```
+## Coding
+### Inline
+```bash
+Inline <data type> <variable name>
+```
+Some time we may compile the file separately and link them together for compilation. The global variable can cause linking error as global variable name is used in different places as symbol is found twice in the object file. In order to avoid this either we can use a extern keyword or inline before the global variable definition.
+#### Example 1 : 
+```bash
+inline int data =10;
+```
+#### Static and Dynamic Linking
+```bash
+g++ main.cpp -o main_dynamic.out
+```
+By default if we use the above command, then STL library or any other header files we used are linked dynamically.
+```bash           
+g++ main.cpp -o main_static.out -static-libstdc++
+```
+If we need static linking then we need to specify the commands like above, also static will have the library in the executable file instead of dynamic linking.
+```bash
+ldd main_static.out
+```
+Using ldd we can inspect library dependencies of files and we can clearly see the statically linked library has executable part inside the code rather than linking dynamically
+```bash
+objdump -dC main_dynamic >main_dynamic.s
+```
+Creating a disassembly of dynamic executable file
+```bash
+objdump -dC main_static >main_static.s
+```
+Creating a disassembly of static executable file
+```bash
+vim -o main_static.s main_dynamic.s
+```   
+We can view both the disassembled files in the split window of vim
+Note: Use ctrl+w to move between the split windows
+
+
+
+

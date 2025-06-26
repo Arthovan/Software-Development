@@ -152,7 +152,7 @@ return a + b;
 ```
 **add.h**
 ```
-#pragma once
+#pragma once    //    This is used instead of header guards
 int add(int, int);
 ```
 **multiply.cpp**
@@ -163,7 +163,7 @@ return a * b;
 ```
 **multiply.h**
 ```
-#pragma once
+#pragma once    //    This is used instead of header guards
 int multiply(int , int );
 ```
 **main.cpp**

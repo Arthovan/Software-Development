@@ -1,0 +1,147 @@
+<!--    superscript -   <sup>
+        subscript   -   <sub>
+        bold        -   <b>
+        italic      -   <i>
+        heading     -   <h1>,<h2>,<h3>,<h4> will have different size of headings
+        new line    -   <br/>   Single tag as it has no end tag
+        line        -   <hr/>   Single tag as it has no end tag
+        small text  -   <small>
+        big text    -   <big>
+-->
+
+<!DOCTYPE html> <!-- HTML Version and telling the search engine that this is html document -->
+<html> <!-- root element-->
+    <head>  <!-- contains meta data information-->  <!-- child Element 1-->
+        <meta charset="UTF-8">
+        <!-- If google is searching for "description" with "content" like this then this page will show up-->
+        <meta name="description" content="This page explains about the DSA Concepts">
+        <!-- Title of this page-->
+        <title>Algorithms</title>
+        <!-- ./ means the image is in the same directory as the index.html files-->
+        <img src="./algorithm.png" alt="Image of Algorithm"/>
+    </head>
+    <body style = "background-color:azure;">    <!-- child Element 2-->
+        <!-- body tag will have various headings and paragraphs-->
+        <h1 style = "background-color:aquamarine;">Algorithm</h1>
+        <br/>   <!-- break tag (br) is used to give new line in the HTML -->
+            <p style="color: red;"> <!-- paragraph tag, where style is from CSS-->
+                An Algorithm is an set of steps or instruction for completing a task. Algorithm definition must contain a specific set of instructions in a particular order<br/> 
+                    <b>Example:</b> Linear Search or Sequential Search or Simple Search<br/>
+                    <ol style="color: blue;">
+                        <li> Start at the beginning</li>
+                        <li> Move Sequentially</li>
+                        <li> Compare current value to target</li>
+                        <li> Reach end of list</li>
+                    </ol>
+                    <b>Explanation:</b> If we have a list of 10 numbers from 1 to 10 (in the list).And we need to find a number 10 than
+                    this search algorithm will search from the beginning to end by comparing the each elements against the number 10, 
+                    at last it will find at index 9, with element 10 in it. If the step 3 and step 2 are changed than algorithm will 1st move to 2<sup>nd</sup> element and look for values, which will result in failure if we are looking for number 1. Thats the reason algorithm should have "Specific set of instructions in a particular order"
+            </p>
+
+        <h2 style = "background-color:aqua;">Guidelines to an Algorithm</h2>
+            <p>
+                <ul style="color: blue;">
+                    <li>Clearly defined problem statement, input, and output</li>
+                    <li>The steps in the algorithm need to be in a very specific order</li>
+                    <li>The steps also need to be distinct</li>
+                    <li>The algorithm should produce a result</li> <small>(If it doesnt produce a result than we will not know whether its working or not)</small>
+                    <li>The algorithm should complete in a finite amount of time</li>
+                </ul>
+            </p>
+
+        <h2 style = "background-color:aqua;">Efficiency</h2>
+            <p>
+                <ul>
+                    <li>Efficiency measured by time is also called as <big><b>"Time Complexity"</b></big>. Its a measure of how long it takes 
+                    the algorithm to run.</li>
+                    <li>Second measure of efficiency is called as <big><b>"Space Complexity"</b></big>. It deals with the amount to memory it takes to complete the task by an algorithm.</li>
+                    <li><b>Linear Search:</b> Elements in this algorithm can be in sorted or unsorted order. As it gonna compare each element by the required value. It is efficient whenever the number of elements are less in number.</li>
+                    <li><b>Binary Search:</b> Elements in this algorithm should be in sorted order. As it gonna compare the element by the required value from middle of the total elements (n/2 order), than check whether the required number is greater or less than that,and repeat the same until it find the number. It is not efficient whenever the number of elements are less in number. Because we need to sort the elements first and then do the binary search. This is efficient when the number of elements are large </li>
+                </ul>
+            </p>
+            
+
+        <h2 style = "background-color:aqua;">Big O</h2>
+            <p>
+                Theoretical definition of the complexity of an algorithm as a function of the size. (Big O is a notation used to describe complexity)<br/>
+                <b>Example:</b> O(n) -- Where "O" is an Order of magnitude of complexity, "n" is a function of the size.
+                <ul>
+                    <li>Linear Search Time Complexity is O(n) - Where "n" number of tries for finding the "nth" element</li>
+                    <li>Binary Search Time Complexity is O(log n) - Where few tries were made to find the "nth"element </li>
+                    <li>Linear Search Space Complexity is O(1) - O(1) often called as constant. Only 1 time data is read into memory </li>
+                    <li>Binary Search Space Complexity is O(1) - Only 1 time data is read into memory </li>
+                </ul>                
+            </p>
+        
+        <h2 style = "background-color:aqua;">Why log(n)</h2>
+            <p>
+                <ul>
+                    <li> 2*1 = 2, 2*2 = 4, 2*3 = 8, which we call as exponential.</li>
+                    <li> Inverse of exponential is logrithamic.</li>
+                    <li> log<sub>2</sub>2 = 1, log<sub>2</sub>4 = 2, log<sub>2</sub>8 = 3</li>
+                    <li> We can see now briefly that how many tries the binary search algorithm is taking to find a value</li>
+                    <li> Target = 16, BS starts from 8, than 12, than 14, than 15 atlast 16 which is 5 tries, which is equal to log<sub>2</sub>16 + 1</li>
+                    <li> If target is 32 than number of tries the BS take is log<sub>2</sub>32 + 1</li>
+                    <li> Where can see clearly that it takes log<sub>2</sub>n + 1 tries to find the "nth" value.</li>
+                    <li> If we plot the graph for both linear and binary search than we can see clealy that binary search graph is below the linear search graph. Thats why BS is often called as <big><b>"Sublinear"</b></big></li>
+                </ul>                
+            </p>
+        
+        <h2 style = "background-color:aqua;">Various Time and Space Complexity</h2>
+            <p>
+                <img src="./Big(O)-types.png" alt="Image of Big(O) types"/>
+                <ul>
+                    <li> Binary         -   O(log n)</li>
+                    <li> Linear         -   O(n)</li>
+                    <li> Quasilinear    -   O(n log n)</li>
+                    <li> Quadratic      -   O(n<sup>2</sup>)</li> 
+                    <B>Note: X<sup>2</sup> - is called as quadratic equation where power is 2.</B>                   
+                </ul>
+            </p>
+        
+        <h2 style = "background-color:aqua;">Where we can expect these kind of runtime in practical use?</h2>
+            Sorting Algorithm is the one place where we can see these kind of runtime.
+            <ul>
+                <li> Merge Sort has worst case runtime of O(n log n)</li>
+                <li> The runtime we looked at so far are called as <big><b>"Polynomial Runtime"</b></big>.</li>
+                <li> An algorithm is considered to have Polynomial Runtime, if a given value of n its worst case runtime is in the form of O(n<sup>^</sup>k)</li>
+                <li> where k = 2 is Quadratic Runtime</li>
+                <li> where k = 3 is Cubic Runtime</li>
+                <li> All are is in the form of n raised to some power</li>
+                <li> Anything that falls under this k power or bound to this are considered to have "Polynomial Runtime"</li>
+                <li> Algorithms within upper bound or runtime with a big O value (that is polynomial) are considered as efficient algorithms and likely to be used in practice.</li>
+            </ul>
+                <img src="./Polynomial Runtime.png" alt="Image of Big(O) types"/>
+
+        <h2 style = "background-color:aqua;">Exponential Algorithm</h2>
+            <big><b>"Exponential Algorithms"</b></big> where n increases slightly and the number of operations increases exponentially. These algorithms are expensive in runtime so considered as not efficient.
+            <ul>
+                <li> Exponential Algorithm : O(X<sup>n</sup>)</li>
+                <li> Lets assume that we need to break into a locker which has a padlock on it, where we forgot the code. It has 2 digit code and code starts from 0 to 9. Normally we used to keep 1<sup>st</sup> dial as zero and try to change the values for second dial from 0 to 9. Like wise we will try 0 to 9 of 1<sup>st</sup> dial and change the values for second dial from 0 to 9</li>
+                <li> The password combination for 2 digit padlock is 0 to 99. This can be generalized as 10<sup>2</sup>.And searching through each individual value until we stumbble on the right one is a strategy called as <big><b>"Brute Force"</b></big>. And Brute Force algorithm have exponential runtime.</li>
+                <li> Here we used two dial so n = 2, each dial as 10 values. For two dials it is 10<sup>n</sup>.</li>
+                <li> The reason that this algorithm is so inefficient is because if we add one more dial on the lock. Thereby increasing (n = 3 and 10<sup>3</sup> which is 1000 values) the number of operations significantly. If n = 4 than it become 10000</li>
+                <li> As n increases then the number of operations increases exponentially to a point where it is unsolvable in a realistic amount of time.</li>
+            </ul>
+
+            <h3 style = "background-color:aqua;">Exponential Algorithm : Traveling Salesman</h2>
+                <img src=" ./Traveling Salesman.png" alt="Image of Exponential Algorithm type - Traveling Salesman"/><br/>
+                Given a list of cities A, B, and C, where we need to find the shortest path between each cities and return to the city where it started.
+                <ul>
+                    <li> As we have only 3 cities the total number of combination for shortest path is 6</li>
+                    <li> If we increase the cities to 4 than our combination will be 24</li>
+                    <li> The mathematical relation that defines this is called as "Factorial", which is written as "n!".</li>
+                    <li> n! is wriiten as n(n-1)(n-2)....(2)(1)... until it reaches 1</li>
+                    <li> Ex: 3! = 3*2*1 => 6. where 4! = 4*3*2*1 => 24</li>
+                    <li> In solving the traveling salesman, the most efficient algorithm will have a "Factorial Runtime" or "Combinatorial Runtime". </li>
+                    <li> At low values of n, algorithm with factorial runtime maybe used but for high values of n its practically impossible to solve the problem. </li>
+                    <li> Runtime Complexity of factorial algorithm is O(n!)</li><br/>
+                    <img src="./Factorial Runtime.png" alt="Image of Factorial Runtime"/><br/>
+                    <br/>
+                    <a href="URL">Git Hub for Python code</a>
+                </ul>
+
+
+            
+    </body>
+</html>

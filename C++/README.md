@@ -1,7 +1,14 @@
 # GCC compilation and useful commands for coding
 [README](https://medium.com/analytics-vidhya/how-to-create-a-readme-md-file-8fb2e8ce24e3)
 
+##Note
+Use the below gcc commands to compile the codes as per the topic, if you want all the contents in
+a single file then use the **generic.cpp** file
 
+## Install gcc
+```bash
+sudo apt install gcc
+```
 For C++ we have to use *g++*, for C use *gcc*
 
 ## Preprocessing -E

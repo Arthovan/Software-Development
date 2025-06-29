@@ -14,20 +14,19 @@ using namespace std;
 //method 1
 void selectionSort(int *a,int size){
     int i,j,temp,minIndex;
-    //minIndex = 0;   // we need to consider,minimum index value is a[0], so index is 0
     for(i=0;i<size-1;i++)
     {
-        minIndex = i;
+        minIndex = i;    // we need to consider,minimum index value is a[0], so index is 0. Next time onwards i value will be updated as we already copied the low value in i position
         for(j=i;j<size;j++)
         {
             if(a[j] < a[minIndex])
             {
                 minIndex = j;
             }
+        }
             temp = a[i];
             a[i] = a[minIndex];
             a[minIndex] = temp;
-        }
     }
 }
 

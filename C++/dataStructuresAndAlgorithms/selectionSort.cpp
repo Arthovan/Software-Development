@@ -10,20 +10,8 @@
 
     Time complexity     :   O(n^2)
     Space complexity    :   O(n)
-    Stable              :   YES
-    Adaptive            :   YES
-  Comparision of Bubble Sort and Insertion Sort
-    ----------------------------------------------------------------
-            List            |   Bubble Sort |  Insertion Sort
-    ----------------------------------------------------------------
-    Minimum Comparision     |   O(n)        |   O(n)
-    Maximum Comparision     |   O(n^2)      |   O(n^2)
-    Minimum Swap            |   O(1)        |   O(1)
-    Maximum Swap            |   O(n^2)      |   O(n^2)
-    Adaptive                |   YES         |   YES
-    Stable                  |   YES         |   YES                 // Stable means maintain the order even if we have duplicates
-    Linked List             |   NO          |   YES
-    K Passes                |   YES         |   NO 
+    Stable              :   NO
+    Adaptive            :   NO
 */
 #include<iostream>
 using namespace std;

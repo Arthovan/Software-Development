@@ -12,6 +12,7 @@
     Space complexity    :   O(n)
     Stable              :   NO
     Adaptive            :   NO
+    Advantage           :   Minimum number of Swaps
 */
 #include<iostream>
 using namespace std;

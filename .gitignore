@@ -36,3 +36,6 @@
 
 # Assembly files
 *.s
+
+# Manually Included file
+gitket.txt

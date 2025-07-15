@@ -26,7 +26,6 @@ bool check(string str){
         else{				//	Return false if string char value is other then 0 - 9 and dot or >255
             return false;
         }
-        i++;
     }
     return true;
 }

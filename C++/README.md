@@ -70,6 +70,43 @@ g++ main.cpp -o compiler_opt_1 -O1
 ```
 compiler optimization flag at the end as O1
 
+## Debug flags (Use g++ for cpp files)
+gcc -g option flag
+gcc -g generates debug information to be used by GDB debugger.
+
+#### option description
+    *    -g0    no debug information
+    *    -g1    minimal debug information
+    *    -g     default debug information
+    *    -g3    maximal debug information
+*Syntax :*    $ gcc -glevel [options] [source files] [object files] [-o output file]
+#### Example 1
+Write source file myfile.c:
+```
+// myfile.c
+#include <stdio.h>
+ 
+void main()
+{
+    printf("Program run!!\n");
+}
+```
+Build myfile.c on terminal and run gdb to debug:
+```
+$ gcc -g myfile.c -o myfile
+$ gdb myfile
+(gdb) run
+Starting program: /home/ubuntu/myfile
+Program run!!
+Program exited with code 012.
+(gdb) quit
+$
+```
+## pthreads (Use g++ for cpp files)
+Sometime the compiler wont support the pthreads in the code. For that we need to compile with pthread flags
+```
+gcc -pthread main.c
+```
 ## Useful Commands
 ### Time
 ```bash

@@ -7,7 +7,7 @@
 
 #define PROCESS
 
-// Execute thred an process function code separetly to see the differences
+// Execute thread and process function code separetly to see the differences
 //------------------- Thread Function code -----------------//
 #ifdef THREADS 
 int x = 2;

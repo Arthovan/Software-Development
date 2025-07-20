@@ -4,8 +4,8 @@
 
 int main(int argc, char* argv[]){
     // Typically, when a fork() is called, it creates 2^n processes, where n is the number of fork() calls. 
-    // The fork() function returns an integer: 0 for the child process ID and a non-zero value for the parent process ID.
-    //  By default, the child process ID is 0. This behavior allows us to use conditional statements to manage the creation of processes effectively.
+    // The fork() function returns an integer: 0 for the child process and a non-zero value for the parent process.
+    //  By default, the child process retuns 0. This behavior allows us to use conditional statements to manage the creation of processes effectively.
     
     int id = fork();     // This will create child process + the current main process
     if(id != 0){

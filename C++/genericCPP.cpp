@@ -12,13 +12,13 @@
 
 
 /*  -----------------------------------   MACROS ---------------------------------   */
-#define POINTER_REFERENCE   //  Enable which macro you need
+#define POINTER_REFERENCE
 //////////////////////////////////////////////////////////////////////////////////
 
 /*  -----------------------------------   TYPEDEF ---------------------------------   */
 #if defined TYPEDEF // First method of naming the "#if defined our text"
 //  Typedef Approach
-typedef std::string text_t; //created a new name for the std::string datatype, it's a common notation to use "_t" at the end of typedef name to show that it is an alias name
+typedef std::string text_t; //created a new name for the std::string datatype, it so common notation to use "_t" at the end of typedef name to show that it is alias name
 typedef int number_t;  
 
 //  Using Approach
@@ -542,10 +542,10 @@ int main(){
 #elif defined(POINTER)
 int main(){
     //  Declaring Pointers
-    int* number_p{};    //  Can only sotre an address of a variable of type int
-    double* fractionalNumber_p{};   //  Can only sotre an address of a variable of type double
+    int* number_p{};    //  Can only store an address of a variable of type int
+    double* fractionalNumber_p{};   //  Can only store an address of a variable of type double
 
-    //  Explicitely initialize to nullptr
+    //  Explicitly initialize to nullptr
     int* number_p1{nullptr};
     int* fractionalNumber_ptr{nullptr};
 
@@ -561,7 +561,7 @@ int main(){
 int main(){
     int x {7};  // x = 7 or x{7} both are same. Its just value assignment
     int* ip = &x;
-    int &y = x; // this is a reference variable so its recommended to make it as const so that the software cant change it at run time or during develepment
+    int &y = x; // this is a reference variable so its recommended to make it as const so that the software cant change it at run time or during development
     // Reference is nothing but alias for the same variable but new name. So the address will be same
 
     std::cout << "The value of   x is "<<x << " address is "<< &x <<std::endl;
@@ -577,7 +577,7 @@ int main(){
 
 #elif defined(PASSBY_VALUE)
 // by default the C++ function calls are of pass by value. Function definition just receive the copy of the actual value passed into it, so if the changes in formal argument value not gonna affect the actual argument value
-// here i have used the vector as value but we can use anything
+// here I have used the vector as value but we can use anything
 void addElements(std::vector<int> value, int N){
     for(int i=0; i<N; i++){
         vector.push_back(i);
@@ -596,7 +596,7 @@ int main(){
 
 #elif defined(PASSBY_REFERENCE)
 // as we can see that the formal arugments are of reference format, if we do some changes here will affect the actual arguments too
-// here i have used the vector as value but we can use anything
+// here I have used the vector as value but we can use anything
 void addElements(std::vector<int> &value, int N){
     for(int i=0; i<N; i++){
         vector.push_back(i);
@@ -670,7 +670,7 @@ int main(){
     int main(){
         std::cout<<"Example:1 Function Overloading\n";
         std::cout<<max(12,15)<<'\n';        //Same function name with 2 integers
-        std::cout<<max(12,15,19)<<'\n';     //Same function name with 2 integers
+        std::cout<<max(12,15,19)<<'\n';     //Same function name with 3 integers
         std::cout<<max(12.01,15.01)<<'\n';  //Same function name with different data type
         std::cout<<max('A','B')<<'\n';      //Same function name with different data type
         std::cout<<"-----------\n";

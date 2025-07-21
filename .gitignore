@@ -39,3 +39,6 @@
 
 # Manually Included file
 gitket.txt
+
+# Remove vs Code config giles
+.vscode/

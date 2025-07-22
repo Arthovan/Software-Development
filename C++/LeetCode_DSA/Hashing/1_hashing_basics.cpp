@@ -76,7 +76,7 @@ else{
 myHashMap[8] = 327;
 myHashMap[45] = 82523;
 
-// We can either this to find the key, value pair or the below one using first and second
+// We can use either this to find the key, value pair or the below one using first and second
 for (auto [key, val]: myHashMap) {
     cout << key << ": " << val << endl;
 }

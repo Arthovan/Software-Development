@@ -9,6 +9,7 @@ using namespace std;
 vector<vector<int>> prime(int data){
     vector<int> temp;
     vector<vector<int>> res;
+    //vector<pair<int, int>> pair;
     int cnt = 0;
     // find all prime numbers upto data
     for(int i = 2; i<=data;i++)
@@ -27,6 +28,8 @@ vector<vector<int>> prime(int data){
         if((temp[i+1] - temp[i]) == 2)
         {
             res.push_back({temp[i],temp[i+1]});
+            //res[0].push_bakc(temp[i]);
+            //res[1].push_bakc(temp[i+1]);
         }
     } 
     return res;

@@ -5,7 +5,7 @@
 #include<sys/wait.h>    //  Thread 
 #include<sys/types.h>   // Thread
 
-#define PROCESS
+#define THREADS
 
 // Execute thread and process function code separetly to see the differences
 //------------------- Thread Function code -----------------//

@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
     if(pthread_join(t1,(void**)&res) != 0){ // pthread_join returns 0 on successfull joining of the thread, if fails we get non zero value
         return 2;
     }
-
+    printf("Main res variable address : %p\n",&res);    //local pointer variable address 
     printf("Main res variable address : %p\n",res);
     printf("Main res variable value: %d\n", *res);
     // Allocating DM in another function and free() it in another function is not a proper method in larger scale software development. We will see in future code how we can avoid this

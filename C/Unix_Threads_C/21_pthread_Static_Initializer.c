@@ -38,7 +38,7 @@ int main(int argc, char*argv[]){
         }
     }
      for(i = 0; i < THREAD_NUM; i++){
-        if(pthread_create(&thread[i],NULL) != 0){
+        if(pthread_join(thread[i],NULL) != 0){
             perror("Failed to join thread");
         }
     }

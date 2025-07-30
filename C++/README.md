@@ -116,7 +116,8 @@ gcc -pthread main.c
 #endif
 ```
 This is the traditional way of implementing the header guards in the source file. Header guard is to avoid multiple inclusion of headers thereby we can avoid redefinition error in compilation.
-Another way of using header guard is #pragam once in the start of the header file and the entire file contents will be included once in the project
+Another way of using header guard is **#pragam once** in the start of the header file and the entire file contents will be included only once in the project
+
 ```bash
 #pragma once
 ```

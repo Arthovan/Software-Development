@@ -21,7 +21,7 @@ void * rollDice(void* arg){
 }
 
 int main(int argc, char* argv[]){
-    int *res;
+    int *res, *val[6];
     srand(time(NULL));
     pthread_t t[6];
     pthread_mutex_init(&mutex,NULL);
@@ -36,10 +36,13 @@ int main(int argc, char* argv[]){
         if(pthread_join(t[i],(void**)&res) != 0){ // pthread_join returns 0 on successfull joining of the thread, if fails we get non zero value
             return 2;
         }
+        val[i] = res;   //  bcs we are receiving 6 threads address in res so we need to store it effectively in the local pointer array to see the exact value in threas
     }
 
-    printf("Main res variable address : %p\n",res);
-    printf("Main res variable value: %d\n", *res);
+    for(int i =0;i<6;i++){
+        printf("Main res variable address : %p\n",val[i]);
+        printf("Main res variable value: %d\n", *val[i]);
+    }
     // Allocating DM in another function and free() it in another function is not a proper method in larger scale software development. We will see in future code how we can avoid this
     free(res); 
     pthread_mutex_destroy(&mutex); 

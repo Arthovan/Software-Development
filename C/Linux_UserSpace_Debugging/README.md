@@ -36,7 +36,7 @@ gcc main.c -g --> as a.out is automatically created instead of main.out
 * Type information for symbols
 * Files and line numbers where the symbols came from
 
-Note : Check the size of binary file with and without the debugging symbols.
+**Note:** Check the size of binary file with and without the debugging symbols.
 
 ```
 gcc main.c -o main.out
@@ -51,7 +51,7 @@ ls -la  --> this will list all the files with size so we can see the filesize wi
 ### How to run a gdb?
 Either type **gdb** with the binary file name or enter into gdb by simply typing the **gdb** and use **file** command with path to the binary file
 
-Method -1
+**Method - 1**
 ```
 gdb ./main.out
 < Also it will show all other details too which I removed here >
@@ -59,7 +59,7 @@ Reading symbols from ./main_g.out...
 quit
 ```
 
-Method -2
+**Method - 2**
 ```
 gdb
 file ./main_debug.out
@@ -112,9 +112,11 @@ This shows a list of available breakpoints in the current gbd and also shows the
  Once the breakpoint hit, we can use the next command to move to the next line of the source code. Also next is used to come out of the function.
 
  **continue**
+
  To move from one breakpoint to next breakpoint or continue a program after breakpoint then we can use this continue command. Instead of going line by line we can go from one breakpoint and stop in the next breakpoint.
 
 **delete**
+
  Use a delete command with breakpoint number to delete that breakpoint
  ```
  delete 2
@@ -122,9 +124,11 @@ This shows a list of available breakpoints in the current gbd and also shows the
  this above command will delete the breakpoint 2.
 
  **step**
+
  This command is used to step into the function. Where sometimes the library functions like printf will be executed step by step using step command. In that case use **finish** command to come out of the fucntion.
 
  **enter**
+
  To execute the previously typed command simply give enter then it will automatically execute the previous command.
 
 ### Command Line Arguments
@@ -132,19 +136,21 @@ This shows a list of available breakpoints in the current gbd and also shows the
 
 You can run gdb with --args parameter.
 
-Method 1
+**Method - 1**
 ```
 gdb --args main.out arg1 arg2 arg3
 ```
-Method 2
+**Method - 2**
 ```
 gdb ./a.out
 (gdb) r arg1 arg2 arg3
 ```
 ### Backtrace 
 A backtrace provides a summary of the call stack, showing how the program reached its current point of execution. It displays the sequence of function calls, from the currently executing function (frame zero) up to the function that initiated the program (e.g., main). 
+
+**Syntax:**
 ```
-Syntax : backtrace or bt
+backtrace or bt
 ``` 
 ```
 (gdb) bt
@@ -154,12 +160,16 @@ Syntax : backtrace or bt
 ```
 This backtrace indicates that my_function is currently executing (frame #0), which was called by another_function (frame #1), which in turn was called by main (frame #2).
 We can use a frame command to move into the specific frame. 
+
+**Syntax:**
 ```
-Syntax : frame <Number of the frame>
+ frame <Number of the frame>
 ```
 To print any variable value of source code in gdb, we need to use the print command
+
+**Syntax:**
 ```
-Syntax : print <variable name>
+print <variable name>
 ```
 ```
 (gdb) bt
@@ -191,7 +201,7 @@ As we can see clearly from above code that malloc creates a segmentation fault. 
 ### Displaying Data
 You can use print command to display the value of variables and other expressions. The print or p command takes any C expression as its argument:
 
-p [/format][expression]
+**p [/format][expression]**
 
 Use **help p** or **help print** for details 
 
@@ -238,8 +248,10 @@ type = int (int, char ***)
 
 ### Modify Variable Value
 We can modify the value of a variable in th source code in gdb, using set command
-```
-Syntax : set <variable name> = <value for variable>
+
+**Syntax:**
+``` 
+set <variable name> = <value for variable>
 ```
 ```
 (gdb) b main

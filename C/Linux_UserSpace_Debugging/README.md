@@ -295,7 +295,7 @@ frame [number]
 We can debug the code by moving to different frame by using frame command with frame number so that list command will show the codes from that frame.
 
 #### Get information about a stack frame
-You can get the information about a particulat frame using 'info frame [number]'.
+You can get the information about a particular frame using **'info frame [number]'**.
 ```bash
 (gdb) info frame 1                      #   list information about the current stack frame
 (gdb) info variables                    #   list all global and static variables.
@@ -305,7 +305,7 @@ You can get the information about a particulat frame using 'info frame [number]'
 (gdb) info breakpoints                  #   list status of all breakpoints
 ```
 #### Using gdb to view the CPU registers
-The shortcut for 'info' is 'i' and 'register' is 'r'. The "i r" command displays the current contents of the CPU registers.
+The shortcut for **'info'** is **'i'** and **'register'** is **'r'**. The **"i r"** command displays the current contents of the CPU registers.
 
 The first column shows the name of the register. Second column shows the content of the register in hexadecimal. Third coulmn shows the contents in 32-bit/64-bit unsigned decimal.
 
@@ -314,7 +314,7 @@ The first column shows the name of the register. Second column shows the content
 ### Conditional Breakpoints
 As long as a breakpoint is enabled, the debugger always stops at that breakpoint. However, sometimes it's useful to tell the debugger to stop at a break point only if some condition is met, like when a variable has a particularly interesting value.
 
-You can sepecify a break condition when you set a breakpoint by appending the keyword "if" to a normal break statement.
+You can sepecify a break condition when you set a breakpoint by appending the keyword **"if"** to a normal break statement.
 
 #### Syntax :
 ```bash
@@ -414,7 +414,7 @@ $2 = 5  # we can see that the breakpoint is occured when the condition of i valu
 Watchpoints are similar to breakpoints. Watchpoints are set on variables. When those variables are read or written, the watchpoint is triggered and program execution stops.
 
 #### How do I set a write watchpoint for a variable?
-Use the watch command. The argument to the watch command is an expression that is evaluated. This implies that the variable you want to set a watchpoint on must be in the current scope.
+Use the **"watch"** command. The argument to the watch command is an expression that is evaluated. This implies that the variable you want to set a watchpoint on must be in the current scope.
 
 So, to set a watchpoint on a non-global variable, you must have set a breakpoint that will stop your program when the variable is in scope. 
 You set the watchpoint after the program breaks.
@@ -422,12 +422,195 @@ You set the watchpoint after the program breaks.
 (gdb) watch x
 ```
 #### How do I set a read watchpoint for a variable?
-Use the rwatch command. Usage is identical to the watch command.
+Use the **"rwatch"** command. Usage is identical to the watch command.
 ```bash
 (gdb) rwatch y 
 ```
 #### How do I set a read/write watchpoint for a variable?
-Use the watch command. Usage is identical to the watch command.
+Use the **"awatch"** command. Usage is identical to the watch command.
+```bash
+(gdb) awatch y 
+```
+#### How do I enable/disable watchpoints?
+Active watchpoints show up the breakpoint list. Use the **"info breakpoint"** command to get this list. Then use the **"disable"** command to turn off a watchpoint, just like disabling a breakpoint. We can use **"enable"** command to enable a breakpoint.
+#### Example
+```bash
+gdb ./a.out
+(gdb) b main
+Breakpoint 1 at 0x1156: file breakpoint.c, line 21.
+(gdb) r             # short form of run
+Breakpoint 1, main (argc=1, argv=0x7fffffffc4b8) at breakpoint.c:21
+21          for(i = 0; i < 10; i++){
+(gdb) watch i       # created a write watch point
+Hardware watchpoint 2: i
+(gdb) c             # short form of continue
+Continuing.
+Hardware watchpoint 2: i    # we can see that watch point triggered for 'i' and we can see the values in detail below
+Old value = 32767
+New value = 0
+main (argc=1, argv=0x7fffffffc4b8) at breakpoint.c:21
+21          for(i = 0; i < 10; i++){
+(gdb) rwatch i      # created a read watch point
+Hardware read watchpoint 3: i
+(gdb) continue
+Continuing.
 
-#### How do I disable watchpoints?
-Active watchpoints show up the breakpoint list. Use the info breakpoints command to get this list. Then use the disable command to turn off a watchpoint, just like disabling a breakpoint.
+Hardware read watchpoint 3: i
+
+Value = 0
+0x0000555555555171 in main (argc=1, argv=0x7fffffffc4b8) at breakpoint.c:21
+21          for(i = 0; i < 10; i++){
+(gdb) awatch i      # created a read/write watch point
+Hardware access (read/write) watchpoint 4: i
+(gdb) continue
+Continuing.
+
+Hardware watchpoint 2: i
+
+Old value = 0
+New value = 1
+
+Hardware access (read/write) watchpoint 4: i
+
+Old value = 0
+New value = 1
+0x000055555555516d in main (argc=1, argv=0x7fffffffc4b8) at breakpoint.c:21
+21          for(i = 0; i < 10; i++){
+(gdb) info b
+Num     Type            Disp Enb Address            What
+1       breakpoint      keep y   0x0000555555555156 in main at breakpoint.c:21
+        breakpoint already hit 1 time
+2       hw watchpoint   keep y                      i
+        breakpoint already hit 2 times
+3       read watchpoint keep y                      i
+        breakpoint already hit 1 time
+4       acc watchpoint  keep y                      i
+        breakpoint already hit 1 time
+(gdb) disable 2         # disabled a watchpoint at number 2
+(gdb) info b            # see the details of break and watch point
+Num     Type            Disp Enb Address            What
+1       breakpoint      keep y   0x0000555555555156 in main at breakpoint.c:21
+        breakpoint already hit 1 time
+2       hw watchpoint   keep n                      i # disabled now
+        breakpoint already hit 2 times
+3       read watchpoint keep y                      i
+        breakpoint already hit 1 time
+4       acc watchpoint  keep y                      i
+        breakpoint already hit 1 time
+(gdb) enable 2          # enable a watch/break point at number 2
+(gdb) info b
+Num     Type            Disp Enb Address            What
+1       breakpoint      keep y   0x0000555555555156 in main at breakpoint.c:21
+        breakpoint already hit 1 time
+2       hw watchpoint   keep y                      i   # enabled now
+        breakpoint already hit 2 times
+3       read watchpoint keep y                      i
+        breakpoint already hit 1 time
+4       acc watchpoint  keep y                      i
+        breakpoint already hit 1 time
+(gdb) 
+```
+### gdb Text User Interface (TUI)
+The gdb Text User Interface (TUI) is a terminal interface which uses the curses library to show the
+        *   Source file
+	*   Assembly output
+	*   Program registers
+	*   GDB Commands
+in separate text windows
+
+The TUI mode is supported only on platforms where a suitable version of the curses library is available. The TUI mode is enabled by default when you invoke gdb as either **"gdbtui"** or **"gdb -tui"**.
+
+You can also switch in and out of TUI mode while gdb runs by using various TUI commands and key bindings, such as **Ctrl-x a**
+	
+#### Commands
+**Ctrl - l** => to repaint the screen //when there are printf's displayed
+
+You can type commands on the command line like usual, but the arrow keys will scroll the source code view instead of paging through history or navigating the entered command.
+
+To switch focus to the command line view, type **ctrl-x o** and the arrow keys works as in the normal command line mode.
+
+Switching back to the source code view is done using the same key combination a second time.
+
+### Logging
+You may want to save the output of gdb commands to a file.There are several commands to control gdb’s logging.
+```
+        set logging on
+                Enable logging. 
+                GDB saves all output from this point in a text file called gdb.txt that resides in the directory in which
+                you are running GDB
+
+        set logging off
+	        Disable logging.
+	        Note that you can turn logging on and off several times and GDB will concatenate output to the gdb.txt file
+
+        set logging file file
+	        Change the name of the current logfile. The default logfile is ‘gdb.txt’.
+```
+Useful when you’re dealing with a long stack trace, or a multi-threaded stack trace.
+
+**Note :**  Make sure you use **"set logging on"** once you enter into the "gdb". once you are done with the debugging then type the **"set logging off"** so that all the debug commands and information will be stored in the **"gdb.txt"** file.
+
+### Debugging an Already-running Process
+**attach process-id**
+```	
+This command attaches to a running process—one that was started outside gdb.
+```
+**detach**
+```
+This command attaches to a running process—one that was started outside gdb
+```
+
+```bash
+./a.out  #make sure the process is still running while attaching the gdb to it
+gdb
+(gdb) shell ps -ef | grep a.out # to get process id of running code
+#  we will get some PID information here and select the current process PID and attach to it
+(gdb) attach <PID> # attach teh gdb to that process
+(gdb) detach # after debug we need to detach from that process
+```
+### Disassembly of the source code
+Another Useful function of gdb debugger is the **"disassemble"** command. As its name suggesting, this command helps in disassembling of the provided functions assembler code.
+If we want to disassemble **"main"** function. we just need to type
+```bash
+(gdb) disassemble main
+```
+#### Example :
+```bash
+gcc assembly.c -o a.out -g
+gdb ./a.out
+(gdb) b main
+Breakpoint 1 at 0x1131: file assembly.c, line 6.
+(gdb) r                                                           
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Breakpoint 1, main () at assembly.c:6
+6               int i = 10;
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000555555555129 <+0>:     endbr64
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+=> 0x0000555555555131 <+8>:     movl   $0xa,-0x8(%rbp)
+   0x0000555555555138 <+15>:    movl   $0x14,-0x4(%rbp)
+   0x000055555555513f <+22>:    mov    -0x4(%rbp),%eax
+   0x0000555555555142 <+25>:    add    %eax,-0x8(%rbp)
+   0x0000555555555145 <+28>:    mov    -0x4(%rbp),%eax
+   0x0000555555555148 <+31>:    sub    %eax,-0x8(%rbp)
+   0x000055555555514b <+34>:    mov    -0x8(%rbp),%eax
+   0x000055555555514e <+37>:    imul   -0x4(%rbp),%eax
+   0x0000555555555152 <+41>:    mov    %eax,-0x8(%rbp)
+   0x0000555555555155 <+44>:    mov    -0x8(%rbp),%eax
+   0x0000555555555158 <+47>:    cltd
+   0x0000555555555159 <+48>:    idivl  -0x4(%rbp)
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x000055555555515c <+51>:    mov    %eax,-0x8(%rbp)
+   0x000055555555515f <+54>:    mov    $0x0,%eax
+   0x0000555555555164 <+59>:    pop    %rbp
+   0x0000555555555165 <+60>:    ret
+End of assembler dump.
+```
+### start
+Sets a temporary breakpoint on **main()** and starts executing a program under GDB.
+```
+start => break main + run
+```
+Still now we used the gdb with **break main** and run the source code using **run** command. Instead of that we can use **start** command and it will apply the break point at main and run the code.

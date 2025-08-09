@@ -1,4 +1,5 @@
-# <ins>Linux User Space Debugging</ins>
+Linux User Space Debugging
+==========================
 ## What is GDB? 
 * GDB stands for GNU debugger, is a tool designed to assist in debugging binary object files generated during the compilation process
 * GDB enables you to observe the behavior of your program, offering substantial assistance when the program crashes, particularly in cases of segmentation faults.
@@ -91,7 +92,11 @@ Breakpoint 1 at 0x1222: file main.c, line 21.
 (gdb) break 11
 Breakpoint 2 at 0x11d9: file main.c, line 12.
 ```
-
+**Note :** If we have multiple source file and we need to apply breakpoint to a particular file then use the below format.
+#### Syntax :
+```bash
+break <file_name> : <line number or funcation name>
+```
 we can use **b** instead of **breakpoint**
 
 #### List of available functions
@@ -198,7 +203,7 @@ You can use print command to display the value of variables and other expression
 ```
 p [/format][expression]
 ```
-Use **help p** or **help print** for details 
+Use **help p** or **help print** for details.
 
 **Note:** Before print make sure you have applied breakpoint in that varible that you are trying to print
 ```bash
@@ -614,3 +619,108 @@ Sets a temporary breakpoint on **main()** and starts executing a program under G
 start => break main + run
 ```
 Still now we used the gdb with **break main** and run the source code using **run** command. Instead of that we can use **start** command and it will apply the break point at main and run the code.
+
+### Command
+#### Syntax : 
+```bash
+command breakpoint-number 
+```
+This specifies commands to run whenever the breakpoint is reached. 
+```bash
+(gdb) b 16      # apply break at line 16
+(gdb) info b    # get the information about breakpoints
+(gdb) command 1 # apply the command for breakpoint 1
+> print <variable name> # whenever breakpoint occurs we need to print the variable value
+> end           # end the command
+(gdb)run        # run the source code 
+(gdb)c          # continue to see the value of the variable everytime break point occurs
+```
+  Type **"command"** for when breakpoint 2 is hit, one per line. End with a line saying just "end".
+
+  We have used to print the variable value every time when the breakpoint occurs in the loop instead we can use this command to set what to do during the breakpoint.
+
+## Core Dump
+A **“core dump”** is a snapshot of memory at the instant when the program is crashed, typically saved in a file called **“core”**.
+
+The core contains a memory contents of the process at the point of seg-fault including its
+```
+        * Code segment 
+        * Data segment 
+        * Stack segment
+        * Heap segment
+```
+### Uses of Core Dump Files
+-->	Core dumps allows a user to save a crash for later analysis or off-site analysis, or comparison with other crashes.
+
+-->	For embedded computers, it may be impractical to support debugging on the computer itself, so analysis of a dump may take place on a different computer.
+
+### Resource Limits
+Every process has various limits associated with it. We can either set or get limit from the commands setrlimit and getrlimit
+```bash
+$ man setrlimit         # Use the manual to see the command setrlimit options
+$ man getrlimit         # Use the manual to see the command getrlimit options
+```
+Bash offers a built-in ulimit through which we can edit these. Core-file max-size (ulimit -c/RLIMIT_CORE) controls the maximum core file size that can be generated when the process snaps.
+```bash
+$ ulimit -a                                                     # to see the list of all available resources
+real-time non-blocking time  (microseconds, -R) unlimited     
+core file size              (blocks, -c) 0                      # we can see that core file is 0, so it will not create a coredump file so we need to make some value
+data seg size               (kbytes, -d) unlimited
+scheduling priority                 (-e) 0
+file size                   (blocks, -f) unlimited
+pending signals                     (-i) 30989
+max locked memory           (kbytes, -l) 65536
+max memory size             (kbytes, -m) unlimited
+open files                          (-n) 1048576
+pipe size                (512 bytes, -p) 8
+POSIX message queues         (bytes, -q) 819200
+real-time priority                  (-r) 0
+stack size                  (kbytes, -s) 8192
+cpu time                   (seconds, -t) unlimited
+max user processes                  (-u) 30989
+virtual memory              (kbytes, -v) unlimited
+file locks                          (-x) unlimited
+$ ulimit -c unlimited                                           # we can set the core dump file to unlimited 
+$ ./a.out                                                       # if we run the binary file, then core file will be created as core file size is unlimited now
+$ ls                                                            # now we can see the core file in the current path 
+```
+**Note :** In wsl core is not creating properly so I found this article for helping with [core dump file creation issues](https://www.fromdual.com/hunting-the-core)
+
+### Where is my core?
+The core is dumped in the current working directory of the process.
+
+### What to do with a core file
+Core files can be examined with gdb, the GNU debugger. It can read the crash informations, and display (among other things) the backtrace that leads to the crash.
+```bash
+$ gdb /path/to/binary /path/to/core/file        # after this we can see the core file will show the exact line where segmentation fault is occured
+```
+After gdb finished to read the input and shows its prompt, execute:
+```bash
+(gdb) backtrace
+# or 
+(gdb) bt
+```
+GDB will then output the backtrace.
+
+### Dumping core from outside the program
+One possibility is with gdb, if available. This will let the program running:
+```bash
+(gdb) attach <pid>
+(gdb) generate-core-file <optional-filename>
+(gdb) detach
+```
+Another possibility is to signal the process. This will terminate it, assuming the signal is not caught by a custom signal handler:
+```bash
+kill -s SIGABRT <pid>
+```
+### Dumping core from within the program
+```bash
+void dump_core_and_terminate(void)
+{
+    /*
+     * Alternative:
+     *   char *p = NULL; *p = 0;
+     */
+    abort();
+}
+```

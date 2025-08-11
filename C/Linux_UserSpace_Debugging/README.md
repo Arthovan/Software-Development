@@ -1118,7 +1118,94 @@ It provides information like number of times a system call is used,
 time spent executing various system calls, number of times errors returned as shown below.
 
 ```bash
-$ strace -c <command>
+strace -c <command> # list the system calls, its count, and errors
 # '-C' - prints the regular output + stats
-$ strace -C <command>
+strace -C <command> # this prints strace o/p + strace -c o/p
+strace -t ./a.out # this prints timestamp before system call
+strace -tt ./a.out # this prints timestamp(in micro seconds) before system call
+strace -ttt ./a.out # this prints timestamp(UNIX_TIME) before system call
 ```
+
+**Note :** we can use strace for shell scripts as well, Ex: strace ./script.sh
+
+### Time spent per system call
+
+Sometimes, it is important to understand which system call is taking how much time. This knowledge can be used to identify the bottlenecks in the application.
+
+Using -T option we can get time spent per system call. -Ttt returns time spent per system call as well as microsecond precision.
+
+```bash
+strace -T pwd
+strace -Ttt pwd
+```
+
+### Child Processes
+
+Sometimes the process you trace doesn't do the real work itself, but delegates it to child processes that it creates.
+
+If that's the case, you may want to pass -f to make strace "follow forks" and trace child processes, too, as soon as they're made.
+
+'-ff' - follows forks with separate output files per-fork.
+
+```bash
+strace -f ./fork # create a strace with child process too
+strace -o fork.log ./fork # store the output of strace in log file
+strace -ff ./fork # will create a parent and child log files
+```
+
+### Attaching strace to a running process
+
+Strace can also be attached to a running process and can be used to record its system calls. To do this, we must know the PID of the process which we want to debug. We can get this PID using the ps command.
+
+When we have the PID, we can pass it to strace using the -p parameter to the command.
+
+```bash
+$ ./a.out &     # ampersand at the means we need to execute this process in background
+[1] 4995        # also will display the PID of the process
+strace -p 4995  # run strace with -p and PID
+```
+
+The “strace -p ...” which is attached to a process may be stopped at any time by typing CTRL-C; The tested program then continues to proceed normally and at full speed.
+
+If the program was started under strace, typing CTRL-C will not only abort strace, but also the launched program.
+
+### Tracing only specific system calls
+
+Sometimes the full syscall trace is too much.Using –e option we can also specify which system calls to be traced.
+
+To trace only open() and close() system calls use the following command:
+
+```bash
+strace –e trace=’open,close’ <program-name>
+```
+
+Similarly we can also use negation option to not trace specific system calls. If we don’t want to trace open() system call in previous example we can give the below command.
+
+```bash
+strace -e trace='!open,close' ./a.out
+```
+
+### Track by specific system call group
+
+* -e trace=ipc – Track communication between processes (IPC)
+* -e trace=memory – Track memory syscalls
+* -e trace=network – Track memory syscalls
+* -e trace=process – Track process calls (like fork, exec)
+* -e trace=signal – Track process signal handling (like HUP, exit)
+* -e trace=file (for syscalls that mention filenames)
+* -e trace=desc (for read() and write() and friends, which mention file descriptors).
+* strace -e trace=open,stat,read,write gnome-calculator
+* strace -e trace=openat cat /etc/hosts
+* strace -e trace=openat,close cat /etc/hosts
+* strace -e trace=openat,close,read,write cat /etc/hosts
+* strace -e file cat /etc/hosts
+
+### strace size
+
+-s [size] Print [size] characters per string displayed. This is useful if you are trying to trace what a program is writing to a file descriptor.
+
+```bash
+strace -s 80 ./program
+```
+
+This will print the first 80 characters of every string.

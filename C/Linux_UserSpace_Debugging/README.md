@@ -1209,3 +1209,45 @@ strace -s 80 ./program
 ```
 
 This will print the first 80 characters of every string.
+
+### Print Instruction Pointer During System Call: 
+
+The -i option displays the instruction pointer at the time of each system call made by the program.
+
+```bash
+strace -i df -h
+```
+
+```bash
+strace -s 2000 -f ./program1
+```
+the “-s” flag to strace telling it the maximum string size we want it to print. This is helpful for showing expanded function arguments. 
+
+Here we pass 2000, which is abitrarily “enough” to see everything we need to see in this program. The default is 32, which in my experience means we’ll almost definitely miss information we care about in the trace.
+
+## ltrace
+
+ltrace is a debugging utility in Linux, used to display the calls a userspace application makes to shared libraries. Its name itself comes from library-call tracing.
+
+This tool is very useful for debugging user-space applications to determine which library call is failing.
+
+```bash
+ltrace ./executable <parameters>
+```
+ltrace(1) also allows you to selectively trace library calls when executed with the “-e” option and a set of calls to trace:
+
+```bash
+ltrace -e malloc ./a.out # this shows only malloc library calls
+```
+If you need to view the library calls from a live process, you can use ltrace(1)’s “-p” option:
+
+```bash
+$ ltrace -p 2644
+```
+
+The parameter -c outputs the number and duration of the library calls that have occurred.
+
+```bash
+$ ltrace -c ls / # shows the list of library calls used and its duration
+$ ltrace -c ls / | less # with less information
+```

@@ -1,6 +1,492 @@
 # Linux User Space Debugging
 
-## What is GDB?
+## Basic Linux Commands
+
+### sudo - super user do
+
+If you prefix “sudo” with any command, it will run that command with elevated privileges or in other words allow a user with proper permissions to execute a command as another user, such as the superuser. 
+
+This is the equivalent of “run as administrator” option in Windows
+
+```bash
+# dmesg -> print or control the kernel ring buffer
+$dmesg -c       # -c means clear the kernel buffer, but it will be rejected 
+
+$sudo dmesg -c  # we are running the same command with super user
+
+$sudo -s        # this command will move to root user so no need of sudo after this.
+```
+### ls --- list
+The ls command is used for viewing files, folders and directories.
+
+```bash
+$ ls            # List Files when no arguments passed
+
+# -l option: Provides information regarding permissions, file sizes and modified date and time.         
+$ ls -l
+
+# -h option: human readabale format. If you want the file sizes in Kilo Bytes, Mega Bytes etc.      
+$ ls -lh
+
+# -a option: Viewing hidden files. Hidden files begin with a full stop (.)     
+$ ls -a    
+
+$ ls -t         # -t option: Sorts the file by modification time
+
+$ ls -lrt       # -r option: Perform reverse operation of sorting
+```
+
+### cd - Change directory
+Allow the user to change between file directories
+
+Absolute Path : Path of the file or directory from the root directory (/)
+
+Relative Path : Path related to the present working directory
+
+```bash
+# Will change from current directory to /etc
+cd /etc # Here we are giving absolute path.
+
+# Will change to gdb folder present in /etc
+cd gdb  # Here we are giving relative path
+
+cd      # Will change to the home directory
+
+cd ..   # Will move back to the parent directory
+
+cd -    # Will switch to the old directory
+
+cd ~    # Will move to the home directory
+
+cd ~/Linux_System_Prog # we can move to Linux_System_Prog folder in home directory
+```
+
+### pwd
+
+Will print the current working directory
+
+```bash
+$pwd
+```
+
+### touch
+
+Allows user to make files from the command line Interface.
+
+**Note:** You can only create files using touch command not directories.
+
+```bash
+$ touch <filename>.<extension>
+```
+
+### rm
+
+rm -- remove. This command is used to remove files
+
+```bash
+$ rm <filename>.<extension>
+```
+Note it only removes files, trying to remove directory fails
+
+You can use -r option to remove the directories. -r option recursively removes directories
+
+```bash
+$ rm -r <directoryname>
+```
+
+### mkdir
+
+mkdir -- Make directory. Allows user to create a new directory.
+
+```bash
+$ mkdir <directory_name>
+```
+
+### rmdir
+
+rmdir -- remove directory. Allows user to remove a directory
+
+```bash
+$ rmdir <directory_name>
+```
+
+### mv
+
+mv -- Move. Allows user to move file from one place to another 
+
+```bash
+mv /home/user1/file1.txt /home/user/test/file1.txt
+# Other use case of mv is to rename
+mv /home/user1/file1.txt /home/user/file.txt
+```
+
+### cp
+
+cp -- Copy
+
+```bash
+$ cp file1 file2
+$ cp -i file1 file2 # if file2 exists prompt for confirmation before overwritting it.
+$ cp -p file1 file2 # Copy file1 to file2 preserving the mode, ownership and timestamp.
+```
+
+### clear
+
+clear command clears the screen. clear command will take the user back to the start prompt of whatever directory you are currently operating in
+
+```bash
+$ clear
+```
+### man
+
+man -- Manual. Use to show the manual of the command passed
+
+```bash
+$ man man       # manual of man command
+$ man cp        # manual of cp command
+$ man printf    # maual of printf (bydefault in section 1)
+$ man 3 printf  # there are different sections in linux, here we are lookin into the section 3 of printf
+```
+
+### locate
+
+Locates a file within the Linux File System
+
+```bash
+$ locate <filename>
+```
+
+### find
+
+Find command performs the same functionality as locates
+
+```bash
+$find <path> -name 'filename'
+```
+
+### Differences between locate and find
+
+Locate uses a prebuilt database, which should be regularly updated
+find iterates over the filesystem to find the files.
+
+Locate is much faster as it uses a database(to update the database use updatedb command).
+Find can select files based on not only name but also permissions, owner, file type etc
+
+```bash
+$find / -name "*conf" -mtime 7  # find a file with conf and modified in last 7 days
+```
+
+command returns a list of all files in the entire file system that end with the characters conf and have been modified in the last 7 days.
+
+### echo
+
+It prints the strings that are passed as arguments to the standard output. echo is usually used in shell scripts to display a message or output the results of other commands.
+
+```bash
+# Display a line of text on standard output.
+
+	$ echo Hello, World!
+
+# Display a line of text containing a double quote.
+
+	$ echo 'Hello "Linux"'
+
+	$ echo "Hello \"Linux\""
+
+# Display a message containing special characters.
+
+	# Use the -e option to enable the interpretation of the escape characters.
+
+	$ echo -e "You know nothing, Jamal.\n\t- Linux"
+
+# echo can be used with redirect operator to output to a file and not standard output.
+
+	$ echo "Test Page" > testpage 
+
+# To append to a file
+
+	$ echo "Test Page" >> testpage
+```
+
+### cat
+
+cat stands for concatenate
+
+```bash
+# Display the contents of the file
+
+	$ cat /etc/passwd
+
+# View contents of multiple files
+
+	$ cat file1.txt file2.txt
+
+# Create a file with cat command
+
+	cat > file.txt
+
+	# Will create a file 'file.txt' and allows user to type the content on the console, until user press CTRL-D to exit
+
+# Display Line numbers in file
+
+	cat -n file.txt
+
+# Redirect output of a file to a new file
+	
+	cat file1.txt > file2.txt
+
+	# Careful, existing contents of file2.txt will be overwritten by contents of file1.txt file.
+
+# Appending to an existing file
+
+	cat file1.txt >> file2.txt
+
+	# Contents of file1.txt will be appended to file2.txt
+```
+
+### more
+
+View contents of text file one page at a time. press spacebar to go to the next page
+
+```bash
+$ more filename
+$ more -num filename    # shows 'num' of lines in a page
+$ more -10 filename     # will show 10 lines for every page
+```
+### less
+
+Less was written by a man who was fed up with more's inability to scroll backwards through a file. Less command is linux utility which can be used to read contents of text file one page(one screen) per time.
+
+```bash
+$ less filename.txt
+```
+You can navigate the page up/down using the less command and not possible in more command.
+
+### head
+
+The head command outputs the first part (the head) of a file or files.head, by default, prints the first 10 lines of each FILE to standard output. 
+
+```bash
+$ head myfile.txt       # Display the first ten lines of myfile.txt.
+
+$ head -15 myfile.txt   # Display the first fifteen lines of myfile.txt.
+
+$ head myfile.txt myfile2.txt   # Display the first ten lines of both myfile.txt and myfile2.txt
+
+$ head -c 20 myfile.txt # Will output only the first twenty bytes (characters) of myfile.txt
+```
+### tail
+
+Tail is a command which prints the last few number of lines (10 lines by default) of a certain file, then terminates.
+
+```bash
+$ tail /path/to/file
+
+# Interested in just the last 3 lines of a file, or maybe interested in the last 15 lines of a file. this is when the -n option comes handy,
+
+$ tail -n <number_of_lines> /path/to/file
+
+# Most useful and commonly used option for tail command is -f option. f stands for follow.Unlike the default behaviour which is to end after printing certain number of lines, the -f option “which stands for follow” will keep the stream going.
+
+$ tail -f /path/to/file
+```
+### pipe |
+
+Linux systems allow stdout of a command to be connected to stdin of another command. You can make it do so by using the pipe character ‘|’.
+
+Pipe is used to combine two or more commands, and in this, the output of one command acts as input to another command
+
+***Syntax :*** **command_1 | command_2 | command_3 | .... | command_N**
+
+```bash
+# 1. Listing all files and directories and give it as input to more command.
+
+$ ls -l | more 
+
+#2. Use head and tail to print lines in a particular range in a file.
+
+$ cat sample2.txt | head -7 | tail -5
+
+# This command select first 7 lines and last 5 lines from the file and print those lines which are common to both of them.
+```
+
+### tee
+
+The tee command reads from the standard input and writes to both standard output and one or more files at the same time.
+
+```bash
+$ df -h | tee disk_usage.txt
+
+# We are using the df command to get information about the amount of available disk space on the file system. The output is piped to the tee command, which displays the output to the terminal and writes the same information to the file disk_usage.txt.
+```
+### ps
+
+ps -- process status. Provides information about currently running processes, including their process identification numbers (PIDs)
+
+When ps is used without any option, it provides information about two processes : shell and ps
+
+```bash
+panther2@ubuntu:/tmp$ ps
+   PID TTY          TIME CMD
+ 39235 pts/11   00:00:01 bash
+ 47154 pts/11   00:00:00 ps
+```
+* TIME is the amount of CPU (central processing unit) time in minutes and seconds that the process has been running
+
+* CMD is the name of the command that launched the process.
+
+* TTY is the name of the console or terminal. Useful on a multi user network
+
+* Common use of ps : ps aux | less
+
+* a -- list the processes of all users on the system rather than just those of the current user
+
+* u -- provide detailed information about each process. 
+
+* x -- adds to the list processes, such as daemons, which are programs that are launched during booting
+
+An alternative set of options for viewing all the processes running on a system is
+ps -ef | less
+
+* The -e option generates a list of information about every process currently running.
+
+* The -f option generates a listing that contains fewer items of information
+
+* The pstree command is similar to ps in that it can be used to show all of the processes on the system along with their PIDs. Shows how processes are related to each other and in that it provides less detailed information about each process than does ps.
+
+### jobs
+To list the process running in background we can use the jobs command
+
+```bash
+$ jobs          # this command will list a processes running in background
+[1]+    Running ./hello &
+$ kill %1       # to kill the process running in background
+$ jobs          # now we can see that the process is terminated already
+[1]+    Terminated ./hello
+```
+
+### grep 
+
+```bash
+# 1. It searches for the given string in the specified file.
+$ grep “linux” file.txt 
+
+# 2. Insensitive search  using -i option
+$ grep -i “linux” file.txt
+
+# The grep command searches for the words like “LINUX”, “Linux”, “linux” case insensitively.
+
+# 3. Searching for a string in multiple files
+$ grep “linux” file*.*
+
+# This command will search for "linux" string in multiple files at a time. It searches in all files with file1.txt, file2.txt and along with different extensions too like file1.html, file2.php and so on.
+
+# 4. Displaying the line numbers.
+$ grep -n “word*” file.txt
+
+# You can use this grep command to display the line number which contains the matched string in a file using the -n option
+
+# 5. Search the pattern recursively using -r option
+$ grep -r linux /etc/
+
+# 6. Counting the lines when words match
+$ grep -c 'test' /home/example/test.txt
+```
+
+### Other Frequently used commands
+
+#### 1. wc -- word count
+* wc -l : Prints the number of lines in a file.
+* wc -w : prints the number of words in a file.
+* wc -c : Displays the count of bytes in a file.
+* wc -m : prints the count of characters from a file.
+* wc -L : prints only the length of the longest line in a file.
+* wc filename.txt : will show number of lines, words and bytes
+
+#### 2. top
+
+top command displays the top processes in the system (by default sorted by cpu usage). 
+
+#### 3. df
+
+Displays the file system disk space usage. By default df -k displays output in bytes.
+
+```bash
+$ df -k
+
+# df -h displays output in human readable form. i.e size will be displayed in GB’s.
+$ df -h
+
+# Use -T option to display what type of file system.
+$ df -T
+```
+#### 4. uname
+
+Uname command displays important information about the system such as — Kernel name, Host name, Kernel release number, Processor type, etc.,
+
+```bash
+$ uname -a
+```
+
+#### 5. date command
+
+Set the system date:
+
+```bash
+$ date -s "01/31/2010 23:59:53"
+```
+
+#### 6. ping command
+
+Check network connectivity
+
+```bash
+ping ipaddress
+```
+
+#### 7. which command
+
+which command in Linux is a command which is used to locate the executable file associated with the given command by searching it in the path environment variable.
+
+```bash
+$ which ls
+```
+
+#### 8. whoami command
+
+whoami command print the name of current user
+
+#### 9. lsof command
+
+lsof mean List of all open files.
+
+```bash
+lsof -u panther2
+```
+
+#### 10. history
+
+It shows history of commands typed in the bash shell.
+
+```bash
+$ history       # to show the history of commands
+$ history -c    # to clear the history
+```
+
+#### 11. time command
+
+Find time taken by a command/program on Linux Shell
+
+The time taken is shown in three forms.
+* real: Total end to end time taken by program/command
+* user: Time taken in user mode.
+* sys: Time taken in kernel mode
+
+```bash
+$ time ls -l
+```
+
+### What is GDB?
 
 * GDB stands for GNU debugger, is a tool designed to assist in debugging binary object files generated during the compilation process
 * GDB enables you to observe the behavior of your program, offering substantial assistance when the program crashes, particularly in cases of segmentation faults.
@@ -1251,3 +1737,10 @@ The parameter -c outputs the number and duration of the library calls that have 
 $ ltrace -c ls / # shows the list of library calls used and its duration
 $ ltrace -c ls / | less # with less information
 ```
+
+To show the library calls related to child process, use -f options together with the ltrace
+
+```bash
+$ ltrace -f ./a.out # to show the information about child process
+```
+

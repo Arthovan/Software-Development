@@ -412,7 +412,7 @@ In the above syntax position can be a function name or line number. If you alrea
 condition bp_number [expression]
 ```
 
-**Example :** For applying conditions together with breakpoint
+**Example 1 :** For applying conditions together with breakpoint
 
 ```bash
 gdb ./a.out
@@ -448,7 +448,7 @@ Breakpoint 1, main (argc=1, argv=0x7fffffffc4b8) at breakpoint.c:22
 $1 = 7 # we can see that breakpoint occured when i value reached 7
 ```
 
-**Example :** For applying conditions for existing breakpoint
+**Example 2 :** For applying conditions for existing breakpoint
 
 ```bash
 gdb ./a.out
@@ -537,7 +537,7 @@ Use the **"awatch"** command. Usage is identical to the watch command.
 
 Active watchpoints show up the breakpoint list. Use the **"info breakpoint"** command to get this list. Then use the **"disable"** command to turn off a watchpoint, just like disabling a breakpoint. We can use **"enable"** command to enable a breakpoint.
 
-#### Example
+#### Example 3
 
 ```bash
 gdb ./a.out
@@ -644,19 +644,16 @@ Switching back to the source code view is done using the same key combination a 
 
 You may want to save the output of gdb commands to a file.There are several commands to control gdb’s logging.
 
-```
-        set logging on
-                Enable logging. 
-                GDB saves all output from this point in a text file called gdb.txt that resides in the directory in which
-                you are running GDB
+* set logging on
+  * Enable logging.
+  * GDB saves all output from this point in a text file called gdb.txt that resides in the directory in which you are running GDB.
 
-        set logging off
-         Disable logging.
-         Note that you can turn logging on and off several times and GDB will concatenate output to the gdb.txt file
+* set logging off
+  * Disable logging.
+  * Note that you can turn logging on and off several times and GDB will concatenate output to the gdb.txt file
 
-        set logging file file
-         Change the name of the current logfile. The default logfile is ‘gdb.txt’.
-```
+* set logging file file
+  * Change the name of the current logfile. The default logfile is ‘gdb.txt’.
 
 Useful when you’re dealing with a long stack trace, or a multi-threaded stack trace.
 
@@ -690,7 +687,7 @@ If we want to disassemble **"main"** function. we just need to type
 (gdb) disassemble main
 ```
 
-#### Example
+#### Example 4
 
 ```bash
 gcc assembly.c -o a.out -g
@@ -980,7 +977,7 @@ strace stands for system call tracer. It is a debugging tool that
 
 System calls are used by userspace applications when they need to do something that requires the kernel.
 
-#### What it does
+### What it does
 
 * Learn which system calls a program make
 
@@ -1029,7 +1026,7 @@ dd if=/dev/zero of=/dev/null bs=1 count=500k
 strace dd if=/dev/zero of=/dev/null bs=1 count=500k
 ```
 
-#### When Is strace Useful?
+### When Is strace Useful?
 
 strace is very useful while debugging crashes.  Some scenarios where strace can be helpful are –
 
@@ -1093,13 +1090,13 @@ exit_group(0)                           = ?
 +++ exited with 0 +++
 ```
 
-#### What are all these calls between execve() and write()?
+### What are all these calls between execve() and write()?
 
 They take care of connecting all of the standard C libraries before the main program starts.
 
 They basically set up the runtime. If you look at them carefully you’ll see that they walk through a series of possible files, check to see if they are accessible, open them, map them into a memory location, and close them.
 
-#### Redirecting the output to a file
+### Redirecting the output to a file
 
 Viewing data in the terminal is one thing, but sometimes we need to record the data to an file so we can analyze it later.
 
@@ -1112,7 +1109,7 @@ strace -o print-trace ./2
 vimdiff empty-trace print-trace
 ```
 
-#### Generate statistics for System Calls
+### Generate statistics for System Calls
 
 Sometimes, we only want to look at which system calls were made by the program and how many system calls of same type were made.These statistics can be used to identify the most commonly used system calls by the program.
 Using –c option strace provides summary information on executing a program.

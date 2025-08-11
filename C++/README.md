@@ -60,6 +60,10 @@ To create an executable from object file
 g++ main.cpp
 ```
 To create a executable directly from source file and default executable name is a.out
+## Enable Warnings
+```bash
+g++ main.cpp -o main -Wall   # Enable all warnings which will show us the warnings in the code
+```
 ## Compiler Optimisation
 ```bash
 g++ main.cpp -o compiler_opt_0 -O0  	

@@ -10,7 +10,7 @@ using namespace std;
 
 int subarraySum(vector<int> ele, int k) {
     unordered_map<int,int> temp;
-    temp[0] = 1;                //  subarray initial value is 0:1 , it means the sum - k = 0 that instance we need to store by default
+    temp[0] = 1;                //  subarray - k may get the answer as 0. That instance we need to store by default.Ex subarray is 3 and k is 3 so 3-3 = 0
     int ans = 0, curr = 0;
     for(int num : ele){
         curr += num;

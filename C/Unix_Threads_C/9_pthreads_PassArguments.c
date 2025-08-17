@@ -14,8 +14,8 @@ int main(int argc, char*argv[]){
     pthread_t task[10];
 
     for(int i = 0;i < 10;i++){
-        // if we send the iterator "i" directly to pthread_create () then we will get some random values at the thread so to avoid that we are allocating a memory in heap an sending 
-        // the fourth argument is reference to the variable in main(), so only we are getting erros as reference is changing and didnt catch the value properly while doing the pthread_join()
+        // if we send the iterator "i" directly to pthread_create () then we will get some random values at the thread so to avoid that we are allocating a memory in heap and sending 
+        // the fourth argument is reference to the variable in main(), so only we are getting errors as reference is changing and didnt catch the value properly while doing the pthread_join()
         int* a = (int*)malloc(sizeof(int));
         *a = i;
         // Passsing the index to the routine thread

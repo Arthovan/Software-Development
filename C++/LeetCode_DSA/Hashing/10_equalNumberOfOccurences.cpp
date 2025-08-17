@@ -11,17 +11,17 @@ Given s = "aaabb", return false. "a" appears 3 times, "b" appears 2 times. 3 != 
 using namespace std;
 
 bool areOccurrencesEqual(string s) {
-    unordered_map<char,int> temp;
-    unordered_set<int> val;
+    unordered_map<char,int> temp;   // store frequency of each character
+    unordered_set<int> val;         // store unique frequencies
     int len = s.length();
     for(char elements : s){
-        temp[elements]++;
+        temp[elements]++;           // count each character
     }
     
     for(auto [key,value] : temp){
-        val.insert(value);           
+        val.insert(value);          // collect distinct frequencies    
     }
-    return val.size()==1;
+    return val.size()==1;           // // true if all frequencies are same
 }
 
 int main(){

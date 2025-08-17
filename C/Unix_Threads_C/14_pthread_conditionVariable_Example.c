@@ -28,7 +28,7 @@ void* routine(void* args){
         } else { // if we just use above if conditional statement only 4 threads will execute at it has only 4 mutex and all 4 might have been locked by 4 threads so remaining 6 threads wont get a chance to execute
             // inorder to avoid that we are creating a else statement and restart the for loop after some delay so mutex will be unlocked so that we can use the 4 mutex again and so on
             if(i == 3){
-                printf("No stove availabel yet, waiting... \n");
+                printf("No stove available yet, waiting... \n");
                 usleep(300000);
                 i = 0;
             }

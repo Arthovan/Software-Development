@@ -8,27 +8,27 @@
 using namespace std;
 int highestOccurence(vector<int>& num) {
     unordered_map<int,int> temp;
-    int minVal = INT_MIN;
-    int element = -1;
+    int maxEleCount = 0, minEleCount = INT_MAX;
 
     for(int i = 0; i < num.size(); i++) {
         if(temp.find(num[i]) != temp.end()) {
             temp[num[i]]++;
-            if(temp[num[i]] > minVal) {
-                minVal = temp[num[i]];
-                element = num[i];
-            } else if((temp[num[i]] == minVal) and num[i] < element) {
-                element = num[i];
-            }
-        } else {
+        } 
+        else {
             temp[num[i]] = 1;
         }
+        if(temp[num[i]] > maxEleCount) {
+            maxEleCount = temp[num[i]];
+        } 
+        else if(temp[num[i]] < minEleCount) {
+            minEleCount = temp[num[i]];
+        }
     }
-    return element;
+    return maxEleCount + minEleCount;
 }
 
 int main(int argc, char*argv[]){
-    vector<int> nums = {1,2,3,3,4,4,2,5,6,7,5,5};
+    vector<int> nums = {10,9,7,7,8,8,8};
     cout<<"MinVal : "<<highestOccurence(nums)<<endl;
     return 0;
 }

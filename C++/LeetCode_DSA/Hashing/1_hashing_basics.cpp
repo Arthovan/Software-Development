@@ -26,7 +26,7 @@ else{
     cout<<"False"<<endl;
 }
 // Accessing a value given a key: use square brackets, similar to an array.
-hashMap[5]; // 3
+hashMap[5]; // output is 3
 
 // Note: if you were to access a key that does not exist, it creates the key with a default value of 0.
 hashMap[342]; // 0
@@ -42,12 +42,12 @@ hashMap[9] = 15;
 hashMap.erase(9);
 
 // Get size
-cout<<hashMap.size(); // 3
+cout<<"size: "<<hashMap.size()<<endl; // 4
 
 // Iterate over the key value pairs: use the following code.
 // .first gets the key and .second gets the value.
 for (auto const& pair: hashMap) {
-    cout << pair.first << " " << pair.second << endl;
+    cout << pair.first << " " << pair.second<<endl;
 }
 
 unordered_map<int, int> myHashMap;
@@ -76,7 +76,7 @@ else{
 myHashMap[8] = 327;
 myHashMap[45] = 82523;
 
-// We can use either this to find the key, value pair or the below one using first and second
+// We can use either this to find the key, value pair or the below one using first and second.
 for (auto [key, val]: myHashMap) {
     cout << key << ": " << val << endl;
 }

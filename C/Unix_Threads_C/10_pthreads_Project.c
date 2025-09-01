@@ -16,7 +16,6 @@ void* routine(void* arg){
     printf("Local Sum : %d\n",sum);
     *(int*)arg = sum;
     return arg;
-    
 }
 
 int main(){

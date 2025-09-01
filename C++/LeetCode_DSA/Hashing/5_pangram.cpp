@@ -26,9 +26,11 @@ bool pangram(string s) {
     for(auto ch:s){
         temp[ch - 'a']++;
     }
+    // This below loop is only for printing the elements and not a part of algorithm
     for(auto ch:temp)
         cout<<ch<<" ";
     cout<<endl;
+    //////////////////////////////////////
     for(auto ch: temp){     
         if(ch == 0)
             return false;    

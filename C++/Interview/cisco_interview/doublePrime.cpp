@@ -5,7 +5,7 @@
 #include<vector>
 
 using namespace std;
-
+// O(n^2) is time complexity
 vector<vector<int>> prime(int data){
     vector<int> temp;
     vector<vector<int>> res;

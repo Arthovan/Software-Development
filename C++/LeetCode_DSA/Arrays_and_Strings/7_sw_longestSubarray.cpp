@@ -19,7 +19,7 @@ int longestSubarray(vector<int> arr, int K) {
             sum -= arr[left];
             left++;            
         }
-        // as we ned only the maximum length of the index we do right - left + 1
+        // as we need only the maximum length of the index we do right - left + 1
         // as we are starting index from 0 we need to add +1 to maintain proper value     
         ans = max(ans, right-left+1);  
     }

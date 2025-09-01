@@ -13,7 +13,7 @@ int main(){
    printf("Enter the number :");
     scanf("%d",&num);
     printf("Enter the character: ");    
-    //  During execution of this program when we type int in the command, then the above scand only reads the integer value but stdin buffer still has "\n", this "\n" is considered as 
+    //  During execution of this program when we type int in the command, then the above scanf only reads the integer value but stdin buffer still has "\n", this "\n" is considered as 
     //    input for this scanf. To avoid that we need to clear the stdin buffer before the next scanf(), so we can use the fflsuh function here
     scanf("%c",&ch);
 

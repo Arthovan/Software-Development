@@ -48,7 +48,7 @@ Node* mergeTwoSortedLL(Node *a, Node *b){
         return a;
     }
     else{
-        b->next = mergeTwoSortedLL(a->next, b);
+        b->next = mergeTwoSortedLL(a, b->next);
         return b;
     }
 }
@@ -73,3 +73,4 @@ int main(){
     displayLL(head);
     return 0;
 }
+

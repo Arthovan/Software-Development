@@ -54,7 +54,7 @@ int main(int argc, char*argv[]) {
        insertLL(head,val[i]);
     }
     displayLL(head);
-    head = deleteDuplicates(head);
+    head = deleteDuplicates(head,2);
     displayLL(head);    
     return 0;
 }

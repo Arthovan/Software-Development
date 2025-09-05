@@ -26,9 +26,29 @@ int highestOccurence(vector<int>& num) {
     }
     return element;
 }
-
+vector<int> countBits(int n) {
+    vector<int> temp;
+    int count = 0,val = 0;
+    for(int i = 0; i <= n; i++){
+        val = i;
+        while(val > 0){
+            if(val&1)
+                count++;
+            val = val >> 1;
+        }
+        temp.push_back(count);
+        //cout<<"Count : "<<count<<endl;
+        count = 0;
+    }
+    return temp;        
+}
 int main(int argc, char*argv[]){
     vector<int> nums = {1,2,3,3,4,4,2,5,6,7,5,5};
-    cout<<"MinVal : "<<highestOccurence(nums)<<endl;
+    //cout<<"MinVal : "<<highestOccurence(nums)<<endl;
+    vector<int> temp = countBits(5);
+    for(int val:temp){
+        cout<<val<< " ";
+    }
+    cout<<endl;
     return 0;
 }

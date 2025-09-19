@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // count of words
 #include<iostream>
 #include<sstream>
@@ -256,6 +257,8 @@ int main(int argc, char*argv[]) {
     return 0;
 }
 
+=======
+>>>>>>> 5e162b0 (feat: added LeetCode_75 files)
 /*  -----------------------------------   HEADERS ---------------------------------   */
 #include <iostream>     //  Contains basic i/p and o/p operations
 #include <cmath>        //  Math related functions are defined here

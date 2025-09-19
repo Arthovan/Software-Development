@@ -1,3 +1,39 @@
+// count of words
+#include<iostream>
+#include<sstream>
+#include<vector>
+#include<string>
+#include<unordered_map>
+
+using namespace std;
+
+int countWords(string str) {
+    stringstream temp(str);
+    string word;
+    unordered_map<string,int> freq;
+
+
+    // String stream implementation
+    /*while(temp >> word) {
+        freq[word]++;
+    }
+    */
+
+    // getline implememtation
+    while(getline(temp,word,' ')) {
+        if(!word.empty()) {
+            freq[word]++;
+        }
+    }
+    return freq.size();
+}
+
+int main(int argc, char* arg[]) {
+    string str = "a value of a words a";
+    cout<<"Count of the unique words are : "<<countWords(str)<<endl;
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////
 /*  A stringstream is a part of the C++ Standard Library, defined in the <sstream> header file. 
     It allows us to read from and write to strings like they are streams.
     It lets us take a string and extract data from it (like from cin), It also lets us build strings by inserting data into it (like into cout).

@@ -10,9 +10,18 @@ int countWords(string str) {
     stringstream temp(str);
     string word;
     unordered_map<string,int> freq;
-
-    while(temp >> word) {
+	
+	// String stream implementation
+    /*while(temp >> word) {
         freq[word]++;
+    }
+    */
+
+    // getline implememtation
+	 while(getline(temp,word,' ')) {
+        if(!word.empty()) {
+            freq[word]++;
+        }
     }
     return freq.size();
 }

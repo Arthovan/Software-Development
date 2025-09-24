@@ -18,7 +18,8 @@ Example 5:  Input: s = "([)]"       Output: false */
 
 using namespace std;
 
-bool isValid(string s) {
+// using only stack to solve the problem
+bool isValidStack(string s) {
     stack<char> stack;
     char top;
     for(char val:s) {
@@ -40,10 +41,28 @@ bool isValid(string s) {
     // if stack is empty then valid parentheses or not valid. empty() returns 1 if stack is empty otherwise 0
     return stack.empty();
 }
-
+// using hashmap and stack to solve the problem
+bool isValidHashmap(string s) {
+    stack<char>stack;
+    unordered_map<char,char> hashMap = {{'}','{'}, {']','['},{')','('}};
+    
+    for(char ch : s){
+        if(hashMap.find(ch) == hashMap.end()) {
+            stack.push(ch);
+        } else {
+            if(stack.empty() || stack.top() != hashMap[ch]) {
+                return false;
+            }
+            stack.pop();
+        }
+    }
+    return stack.empty();
+}
 int main(int argc, char*argv[]){
     string str = "(){}[]";
-    isValid(str)==1?cout<<"Parentheses are valid"<<endl:cout<<"Parentheses are not valid"<<endl;
+    isValidStack(str) == 1 ?cout<<"String parenthesis (Stack only) are valid"<<endl:cout<<"String parenthesis (Stack only) are not valid"<<endl;
+    isValidHashmap(str) == 1 ?cout<<"String parenthesis (stack and hashmap) are valid"<<endl:cout<<"String parenthesis (stack and hashmap) are not valid"<<endl;
     return 0;
 }
  
+

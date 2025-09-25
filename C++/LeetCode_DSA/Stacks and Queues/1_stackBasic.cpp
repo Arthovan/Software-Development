@@ -1,3 +1,10 @@
+/*  Stack : A stack is a linear data structure that follows the Last In, First Out (LIFO) principle. This means that the last element added to the stack will be the first one to be removed. Stacks are analogous to a stack of plates where you can only add or remove plates from the top. Common operations in a stack include:
+    * Push: Adding an element to the top of the stack.
+    * Pop: Removing the top element from the stack.
+    * Peek/Top: Retrieving the top element without removing it.
+    * Size: To get the size of the stack(shows how many elements in the stack)
+    * Stacks are used in various applications such as reversing a word, backtracking algorithms (like finding a path in a maze), and in the implementation of function calls in recursion.
+*/
 #include<iostream>
 #include<vector>
 #include<stack>
@@ -30,6 +37,9 @@ int main(int argc, char*argv[]){
 
     // Get size
     cout<<"Stack size is : "<<stack.size()<<endl; // 1
+    stack.pop();
+    cout<<"Stack size is : "<<stack.size()<<endl; // 0
+
     return 0;
 }
 //////////////////////////////////

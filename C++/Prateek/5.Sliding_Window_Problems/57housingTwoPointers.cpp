@@ -4,21 +4,21 @@
 using namespace std;
 
 void twoPointers(vector<int>a,int len,int k){
-    int i = 0, j = 0,sum = 0;
-        while(j < len){
+    int left = 0, right = 0,sum = 0;
+        while(right < len){
             //Expand to the right
-            sum += a[j];
-            j++;
+            sum += a[right];
+            right++;
 
             // Remove the elements to the left is sum > k and i<j
-            while(sum > k and i < j){
-                sum -= a[i];
-                i++;
+            while(sum > k and left < right){
+                sum -= a[left];
+                left++;
             }
 
             if(sum == k){
                 // print that window
-                cout<<"["<<i<<" "<<j-1<<"]";    // j-1 because j incremented after the sum "expand to the right"
+                cout<<"["<<left<<" "<<right-1<<"]";    // right-1 because right incremented after the sum "expand to the right"
             }
         }
         cout<<endl;

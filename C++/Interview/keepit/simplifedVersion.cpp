@@ -5,7 +5,9 @@
 #include <unordered_set>
 #include <vector>
 #include <pthread.h>
+#include <thread>
 
+using namespace std;
 // Shared global set and mutex
 unordered_set<string> global_set;
 pthread_mutex_t global_mutex = PTHREAD_MUTEX_INITIALIZER;

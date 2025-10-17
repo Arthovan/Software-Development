@@ -65,7 +65,7 @@ int main(){
     displayLL(head);
 
     for(int i=0;i<brr.size();i++)
-        insertAtHead(head,brr[i]);
+        insertAtHead(head1,brr[i]);
     cout<<"Insert at Head is done for head1"<<endl;    //  elements are now 0,5,6,7 
     displayLL(head1);
     

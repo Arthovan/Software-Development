@@ -32,6 +32,15 @@ void insertionSort(int arr[], int size){
         }
         arr[j+1] = temp;                //  if while pass this will store the 
     }
+	
+	// Easy method to remember
+	for(int i = 0; i < n; ++i) {
+		int j = i; 
+		while (j > 0 and arr[j-1] > arr[j]) {
+			swap(arr[j-1], arr[j]);
+			j--;
+		}
+	}
 }
 
 int main(){

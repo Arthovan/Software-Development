@@ -1,5 +1,20 @@
 ///////////////////////////////////////////////////////////////
-/* Queues Basic with some APIs */
+/* Queues Basic with some APIs 
+	A queue is a linear data structure that follows the First In, First Out (FIFO) principle. 
+	This means that the first element added to the queue will be the first one to be removed. 
+	Queues are similar to a line of people waiting for a service where the first person in line 
+	is the first to be served. Common operations in a queue include:
+	
+	*	Enqueue (push()): Adding an element to the end of the queue.
+	*	Dequeue (pop()): Removing the front element from the queue.
+	*	Front/Peek (front()): Retrieving the front element without removing it.
+	*	Size: To get the size of the queue(shows how many elements in the queue)
+	
+	Queues are widely used in scenarios like scheduling processes in operating systems, handling 
+	requests in web servers, and in breadth-first search algorithms'
+	Understanding stacks and queues is fundamental in computer science as they provide the basis 
+	for more complex data structures and algorithms.*/
+	
 #include<iostream>
 #include<queue>
 

@@ -12,7 +12,7 @@ A data structure which stores the data in the hierrachical manner is called "Tre
 
 A tree where node can have maximum of 2 children.
 
-![Parent-Child Relation](./Parent-Child.webp "Parent - Child")
+![Parent-Child Relation](./binary-tree-data-structure.webp)
 
 ### Types of Binary Tree
 
@@ -36,7 +36,7 @@ All nodes must have 2 or 0 children
 
 #### Degenerate BT
 
-![Binary Tree Types](./What_are_the_5_Types_of_Binary_Trees.webp "Binary Tree Types")
+![Binary Tree Types](./types_of_BST.jpeg)
 
 ### Traversal Techniques
 

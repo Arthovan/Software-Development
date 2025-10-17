@@ -24,8 +24,8 @@ Supports DCF, DDM, P/E, Book Value methods, margin of safety, and color-coded te
 1. **Clone or download the repository**  
 
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone https://github.com/Arthovan/Software-Development/Python/Finance/intrinsicValueCalculation
+cd intrinsicValueCalculation
 ```
 
 2. **Create a virtual environment (recommended)**

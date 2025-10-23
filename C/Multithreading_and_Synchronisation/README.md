@@ -5,7 +5,10 @@
 ## API's
 
 *   **pthread_create()**
-    *   Syntax : pthread_create(thread, attr, routine, arg).
+    *   Syntax : 
+    ```bash
+    pthread_create(thread, attr, routine, arg).
+    ```
     *   To create a new thread
 
 *   **pause()**
@@ -68,6 +71,7 @@
 *   Any thread can invoke pthread_join() for any othre Joinable thread, not just parent thread.
 
 ### Problem : Map-Reduce
+
 *   A map reduce is a progrmaming model based on Divide and Conquer Paradigm.
 
     **Example :** Count number of words in a text file.
@@ -79,9 +83,10 @@
     *   Moderator thread need not be reducer thread, they can be different.
 
 ### When to create which type of thread?
+
 *   Create thread T as Joinable when :
     *   T is supposed to return some results to other threads
-        *   Example : Map-Reduce
+        *   **Example:** Map-Reduce
     *   When some threads are interested in being notified of other thread's termination.
 
 *   Create thread T as Detached when :
@@ -91,3 +96,129 @@
         *   Waiting for user input.
         *   Waiting for network packet.
         *   TCP server's worker thread interacting with TCP client.
+
+## Notification Chains
+
+*   Notification Chains is an architectural concept used to notify multiple subscribers interested in the particular event.
+*   A party which generates an Event is called "Publisher", and parties which are interested in being notified of the event are called "Subscribers".
+*   There is one publisher and multiple subscribers.
+*   Once the Event is generated/produced by the publisher, the event is pushed to subscriber(s).
+*   Subscriber can register and de-register for the event at their will.
+*   Publisher /Subscribers could be any entities:
+    *   Multiple threads of the same process.
+    *   Multiple processes running on same system.
+    *   Multiple processes running on different systems.
+    *   Different components of the same big software system.
+
+## Thread Cancellation
+
+*   Many times a thread which is in the state of execution needs to be cancelled 
+
+    **Examples:**  
+    *   You may want to cancel on-going search operation.
+    *   You may want to stop sending periodic packets.
+    *   You may want to stop downloading the file
+    
+    So thread cancellation is quite common in the real world. In general thread cancellation is lot like telling a human to stop something they are doing.
+*   Any thread of the process can choose to canel the other thread (with some constraints).
+*   Once the thread is cancelled it is terminated (thread cease to exist).
+
+### API and Fucntions for Thread Cancellation
+
+*   We need to use an API **pthread_cancel(<thread_ID>)** to cancel the thread. 
+*   With this API thread wont cancel automatically because by default thread is created with non cancellable mode.
+*   To make a cancellable thread we need to use 2 API in the thread function.
+*   Mark the thread cancellable or not : **pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,0)**
+
+    *   PTHREAD_CANCEL_ENABLE : for making a thread as cancellable
+    *   PTHREAD_CANCEL_DISABLE : for making a thread as non cancellable
+*   Another API is mode of cancellation : **pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, 0)**
+
+    *   PTHREAD_CANCEL_ASYNCHRONOUS :   to make a asynchronous thread cancellation
+    *   PTHREAD_CANCEL_DEFERRED     :   to make a deferred thread cancellation
+
+### Types of Thread Cancellation
+
+*   Asynchronous thread and deferred thread are 2 types of thread cancellation
+
+    ![Asynchronous thread](./asyncThread.jpg)
+
+* 
+
+### Problems with Asynchronous Cancellation
+*   What will happen if you are driving a car, and suddenly you are asked to leave the steering wheel? It will cause an acceident
+*   Likewise asynchronous canellation of thread leads to below problems
+
+    1.  Resource Leaking 
+        *   Not closing the open file descriptor/sockets.
+        *   Not freeing the memory.
+    2.  Invariants 
+        *   Data structure corruption
+    3.  Deadlocks 
+        *   Mutexes left in lokced state forever.
+    
+    **Note:** 
+    *   Problem with resource leaking is resolved by a concept called "Cleanup handlers" (Thread must be given one last chance to clean up resoures before it is terminated is called as Cleanup handlers)
+    *   Problem with Invariants and Deadlocks are resolved by a concept called "Cancellation Points - only for deferred cancellation" (Thread must cancel at specific points in execution flow, and not just anywhere randomly is called as Cancellation points which is only for deferred cancellation type)
+
+#### 1.  Resource Leaking 
+
+*   If thread is doing some write operation into the file, just like our master_slave1.c and suddenly if asynchronous cancellation request occurs then those file would have incompleted data and its respective file descriptor might not have closed. Also heap memory might not have freed properly.
+
+#### 2. Invariants 
+
+*   Threads when cancelled abruptly may lead to the problem of invariants which may in-turn lead to data structure corruption, memory leak, wrong computation etc.
+*   Invariants means - A data structure in inconsistent state
+*   Operation updating the data structures must not be left incomplete on thread cancellation.
+*   Thread must not get cancelled while it is updating the data structures.
+
+     **Example:**    
+     *  A double linked list deletion of node is currently executed by thread and because of thread cancellation request the node might not have properly deleted. Resulting in the nodes pointing to random data which supposed to be deleted or link between nodes might have broken which cause Invariants.
+     *  Cancelling the thread removing/adding a node in a Balanced Tree(red-black/AVL trees).
+     *  Cancelling the thread which is in the process of executing system calls. Abruptly terminating the system calls may lead to kernel corruption/variants in kernel space.
+
+#### 3.  Deadlocks
+
+*   What if the thread has locked the mutex M, and then it is cancelled.
+    *   Mutex would stay locked by the non-existing thread. (Thread is cancelled and it is termianted so only its a non-existing thread).
+    *   Any other live thread would enter into deadlock if it try to lock the same mutex.
+    *   We need to ensure that when thread is cancelled, it must not have any mutex held in locked state.
+
+#### Preventing Resource Leaking
+*   If we could give thread being cancelled one last chance to clean uo his mess, then resources leaking could be handled.
+*   **POSIX** standards provide the concept of **Thread Clean up Handlers**
+*   Thread clean up handlers are fucntions which are invoked just before the thread is about to be cancelled.
+*   **Syntax :** 
+
+    ```bash    
+        void (*cleanup_handlers)(void *);
+    ```
+*   When clean up handler function returns, then only the thread is cancelled immediately.
+*   Thread clean up handlers are specified in the form or stack (stack of functions)
+*   Clean up handlers are invoked from top of the stack to bottom of the stack
+
+    ![Clean Up Handlers](./cleanupHandlers.jpg)
+
+*   this below API should be called after the resource allocation
+    ```bash
+    pthread_cleanup_push(<resource handle to be freed>,<memory address to be freed>)
+    ```
+    *   resource handle to be freed -   callback function to handle freeing of heap memory or file closure
+    *   memory address to be freed  -   specify the pointer variable to be freed.
+*  this below API should be called at the end.
+    ```bash
+    pthread_cleanup_pop(0)
+    ```
+*   This pthread_cleanup_push API creates a function in the stack of top to bottom approach, where we can have many pthread_cleanup_push API in stack as the resources in the thread.
+*   If the thread receives thread cancellation request then thread cleanup will be automatically invoked.
+*   If the thread didnt receive cancellation request and it finished its execution. Then its developer responsibility to close those stack functions thats why we add pthread_cleanup_pop(0) at the end.
+
+**Points to be known in Cleanup Handler**
+*   pthread_cleanup_push is replaced by some '{' and some inter mediate code at compile time
+*   pthread_cleanup_pop is replaced by some intermediate code and '}' at compile time.
+*   Lets say if we 5 push in the thread then the same number of pop should be called if not we will get related to '{' and '}' braces.
+*   Ensure, parenthesis are balanced (by imaging push as "{" and pop as "}")
+*   If n = 0 is passed in pthread_cleanup_pop(n) clean up function is popped out from stack.
+*   If n = ~0 is passed in pthread_cleanup_pop(n) cleanup function is popped out from stack and Invoked. (This is used in non cancellable thread)
+*   Cleanup functions are also invoked when thread terminates using pthread_exit()
+*   Cleanup functions are not invoked when thread terminates by virute of return statement.

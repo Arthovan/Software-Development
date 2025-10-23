@@ -12,12 +12,19 @@ struct Node {
 }*last;
 
 Node* removeTailLL(Node *headLL) {
-    // if there is no head then return simply
+    // if there is no head or has only one node then return simply
     if(headLL == NULL or headLL->next == NULL) {
         return NULL;
     }
     Node *temp = headLL; // hold the headLL
-    Node *prev = NULL; 
+    /////////////////////////////////
+    Node *prev = NULL; // either we can use prev or use the temp->next->next in while loop traverse to get the desired ouput
+    /*while(temp->next->next) {
+        temp = temp->nexxt;
+    }
+    delete temp->next;
+    temp->next = nullptr;
+    return head;*/
     while(temp->next != NULL) {
         prev = temp;
         temp = temp->next;

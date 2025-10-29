@@ -478,8 +478,18 @@ Inorder to protect the Critical Section we use Mutex. But there are scenarios wh
 ![Wait Signal Full Steps](./Wait_Signal_FullSteps.jpg)
 
 #### Multiple Condition Variables
+
 *   Mutex is always a property of a resource (Shared Data or code) and Condition Variable could be a property of resource (Shared Data or code) or thread.
 
 ![Multiple Conditional Variable](./Multiple_CV.jpg)
 
 ![Single Conditional Variable](./Single_CV.jpg)
+
+#### Broadcasting a Conditional Variable
+
+*   If T2 is a producer and T1, T3 and many other threads are consumer then we can use pthread_cond_signal(&cv) to signal the consumer threads that producer thread kept some data in shared data to be consumed by consumer threads. But which thread gets the shared data is not sure as the OS select the thread to be processed or else we can call the pthread_cond_signal(&cv) to "n" number of times, where n is the number of consumer threads. But using the pthread_cond_broadcast(&cv) we can make sure all the consumer threads gets the shared data one by one.
+
+![Broadcast Conditional Variable](./Broadcast_CV.jpg)
+
+*   In the above example Ts thread did the broadcast and T1, T2 and, T3 where receiver thread which receives the broadcast signal and Lets say the OS executes in the order of T2, T1 and T3 order. So first T2 moves from Blocked to ready to execute to execute and then T1 and the T3.
+

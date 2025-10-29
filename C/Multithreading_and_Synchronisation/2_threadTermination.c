@@ -36,9 +36,8 @@ void thread1_create() {
     Do not pass some local variable or stack memory */
     static char *thread_input1 = "I am thread no 1";
 
-    /* pthread_create() returns 0 on success, othrewise returns error code, all pthread fucntions returns -ve error code on failure. They do not
-    set global variable.
-        phtread1                    =   thread handler
+    /* pthread_create() returns 0 on success, othrewise returns error code, all pthread functions returns -ve error code on failure. They do not set global variable.
+        pthread1                    =   thread handler
         NULL
         thread_fn_callback          =   Pointer to the function 
         input data to the thread    =   data that can be passed to thread as an argument and it should be of static or heap memory but not from stack. Reasson is after this pthread_create call the new thread is going to be created if the passed value is local and the called thread dies then there wont be any local value as the function dies already. This behaviour can be catostrophic in reading the data in thread as an argument. */

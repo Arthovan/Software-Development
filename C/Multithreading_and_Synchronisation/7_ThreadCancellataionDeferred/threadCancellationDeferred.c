@@ -46,7 +46,7 @@ void *  write_into_file(void *arg){
     /* Mark the thread elligible for cancellation */
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,0);
     /* Mode of cancellation */
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,0);
+    pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,0);   //  1 : Change for deferred 
 
 	int *thread_id = (int  *)arg;
 	/* Resource Leaking prevention by memory Clean Up handler*/
@@ -70,6 +70,8 @@ void *  write_into_file(void *arg){
 		fwrite(string_to_write, sizeof(char), len, fptr);
 		fflush(fptr);
 		sleep(1);
+        // I have used this API below because sprintf,fwrite and fflush have the internal implementation during that execution time if I get a cancel request in asynchronous mode may cause some invarints issue. Inoder to avoid the invariant am choosing this line to test for cancel signal 
+        pthread_testcancel();   //  1 : Change for deferred 
 	}
 	/* Resource Leaking prevention by Clean Up handler*/
 	pthread_cleanup_pop(0);	//	Cleanup handler 1
@@ -83,7 +85,7 @@ int main(int argc, char **argv){
 	int *thread_id = 0;
 
 	for( i = 0; i < N_SLAVES; i++){
-	    thread_id = calloc(1, sizeof(*thread_id));
+	    thread_id = (int*)calloc(1, sizeof(*thread_id));
 		*thread_id = i;
 		pthread_create(&slaves[i], 0, write_into_file, thread_id);
 	}	

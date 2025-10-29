@@ -123,7 +123,7 @@
 *   Any thread of the process can choose to canel the other thread (with some constraints).
 *   Once the thread is cancelled it is terminated (thread cease to exist).
 
-### API and Fucntions for Thread Cancellation
+### API and Functions for Thread Cancellation
 
 *   We need to use an API **pthread_cancel(<thread_ID>)** to cancel the thread. 
 *   With this API thread wont cancel automatically because by default thread is created with non cancellable mode.
@@ -141,11 +141,16 @@
 
 *   Asynchronous thread and deferred thread are 2 types of thread cancellation
 
-    ![Asynchronous thread](./asyncThread.jpg)
+#### Asynchronous Cancellation
 
-* 
+Asynchronous cancellation allows a thread to be terminated immediately as soon as a cancellation request is received — no matter where it is in its execution.
 
-### Problems with Asynchronous Cancellation
+Unlike deferred cancellation, which waits until a safe cancellation point, asynchronous cancellation can interrupt a thread at any moment.
+
+![Asynchronous thread](./asyncThread.jpg)
+
+#### Problems with Asynchronous Cancellation
+
 *   What will happen if you are driving a car, and suddenly you are asked to leave the steering wheel? It will cause an acceident
 *   Likewise asynchronous canellation of thread leads to below problems
 
@@ -185,6 +190,7 @@
     *   We need to ensure that when thread is cancelled, it must not have any mutex held in locked state.
 
 #### Preventing Resource Leaking
+
 *   If we could give thread being cancelled one last chance to clean uo his mess, then resources leaking could be handled.
 *   **POSIX** standards provide the concept of **Thread Clean up Handlers**
 *   Thread clean up handlers are fucntions which are invoked just before the thread is about to be cancelled.
@@ -214,6 +220,7 @@
 *   If the thread didnt receive cancellation request and it finished its execution. Then its developer responsibility to close those stack functions thats why we add pthread_cleanup_pop(0) at the end.
 
 **Points to be known in Cleanup Handler**
+
 *   pthread_cleanup_push is replaced by some '{' and some inter mediate code at compile time
 *   pthread_cleanup_pop is replaced by some intermediate code and '}' at compile time.
 *   Lets say if we 5 push in the thread then the same number of pop should be called if not we will get related to '{' and '}' braces.
@@ -222,3 +229,257 @@
 *   If n = ~0 is passed in pthread_cleanup_pop(n) cleanup function is popped out from stack and Invoked. (This is used in non cancellable thread)
 *   Cleanup functions are also invoked when thread terminates using pthread_exit()
 *   Cleanup functions are not invoked when thread terminates by virute of return statement.
+
+#### Deferred Cancellation
+
+*   In POSIX threads, cancellation means one thread can request another thread to terminate. However, threads should be able to control when they can safely be cancelled — especially if they are holding locks, managing resources, or in the middle of critical operations.
+
+That’s where deferred cancellation comes in.
+
+🔹 Definition
+
+Deferred cancellation allows a thread to postpone acting on a cancellation request until it reaches a cancellation point.
+
+This means: A thread can receive a cancellation request at any time, but it will only terminate when it reaches a defined safe point (like pthread_testcancel(), read(), sleep(), etc.).
+
+*   Deferred cancellation is used to handle the problem of Invariants.
+*   Deferred cancellation thread is has certain cancellation points where it will be safely cancelled.
+*   Cancel signal can be delivered by the kernel to the thread being cancelled, but processed only at the cancellation points of the executing thread.
+*   To set a cancellation point we need to use a API **pthread_testcancel()**, this API will check if cancel signal is pending, if yes then invoke clean up handlers and cancel thread.
+It is the programmer responsibility to choose CP wisely such that when thread is cancelled at CP no Variants/Leak/Deadlocks occur.
+
+## Listener Threads
+
+*   It is a common scenario that an application needs to constantly listen to external events.
+*   Those external events can arrive anytime, and application needs to process those events.
+*   Application may use threads to listen on those external events.
+    **Example:** If a process is waiting for certain events like extrenal interrupt to occur, Network signal to be received, signal from kernel, User input and many more. Chances are there that the main logic wont be executed as the process is waiting for some external inputs.
+*   By using listener threads, process can listen to all events at the same time, when event arrive then process them.
+
+## Thread Synchronization
+
+*   Thread Synchronization is required in multi-threaded programs whenever multi-threads compete to perform conflicting (Read-Write or Write-Write) on a shared resource.
+
+    **Shared Resources:**
+    *   Heap data structure
+    *   Global Variables
+    *   File Descriptors(opened files and Sockets)
+    *   Receiving data from external sources via multiple inlets
+
+    **Let us try to understand the problems we would have if we dont have Thread-Synchronization**
+    *   Consider a multi-threaded process P having two threads T1 and T2
+    *   Also, consider a process P maintains a linked list of integers.
+    *   Thread T1 and T2 are scheduled on the CPUs in any order - we cant assume in which order threads will be scheduled in the OS.
+    *   Concurrent access of shared data structures between Multiple - Threads opens a window during which data is in-consistent - Root cause is "Concurrency".
+    *   The region in code where shared data is accessed by multiple threads are called "Crtitical Sections".
+
+### Critical Section
+
+*   Code Excerpt accessing the shared data are critical sections. Where shared data are Global Variables, heap data structures and static variables.
+
+    **Rule of Thumb:**  Critical Sections must be executed by concurrent threads but by one and only one thread at a time.
+    *   Unexpeceted behavior.
+    *   Segement Fault
+    *   Data Corruption
+    *   Any abnormal behavior.
+
+    *   Thread Synchronization - Identify CS and apply several techniques to prevent unprotected concurrent access to shared resources by several threads of the process.
+
+### Mutexes
+
+*   Mutexes are Thread Synchronization constructs/tools which provide Mutual Exclusivity while accessing a critical section by multiple consurrent threads.
+
+#### Mutex APIs
+
+**Declaration:**    pthread_mutex_t my_mutex;
+**Initializing:**   pthread_mutex_init(&my_mutex, NULL);
+**Destruction:**    pthread_mutex_destroy(&my_mutex);
+**Locking and Unlocking:**  pthread_mutex_lock(&mutex);
+                            pthread_mutex_unlock(&mutex);
+**Note:**   Mutex section of the code never be memcpy-ied which will cause Undefined behavior
+
+#### Analogy
+
+*   Mutexes are like Keys to the locker, whoever wants to access the locker need to have keys.
+*   Whoever do not have keys, cannot access locker and has to wait.
+*   Whoever is accessing the locker, need to handover the keys when done accessing the locker.
+    *   Locker - Critical Section
+    *   Whoever - Threads
+    *   Keys - Mutexes
+
+#### How Mutexes work?
+```bash
+foo() {
+    ...
+    ...
+    ...
+    pthread_mutex_lock(&mutex);
+    /* critical Section */
+    pthread_mutex_unlock(&mutex);
+    ...
+    ...
+    ...
+}
+```
+*   Grant access to CS only one thread at a time.
+*   Which ever threads locks the Mutex, shall be able to enter into CS
+*   If a thread tries to lock already locked mutex, then thread will be blocked.
+*   Multi-threads may be blocked by same Mutex.
+*   When thread exits out the critical section, it must unlock the mutex.
+*   Among many threads waiting for the same Mutex, Mutex shall be granted to only one depending on several factors such as Thread Priority, OS scheduling policy etc.
+*   Thread must not intentionally die while holding the Mutex lock, that Mutex become unsuable for forever.
+*   Use if mutexes causes thread to block and unblock. More the blocking and unblocking of threads, more scheduling work overhead on OS, poorer shall be the application performance.
+*   Bigger the size of CS, larger the time the blocked threads would have to wait, hence again poorer shall be application performance.
+
+
+#### Mutex locking Rules
+
+*   If T1 locks a mutex M, only T1 can unlock it.
+*   T1 cannot unlock an already unlocked mutex, which cause a undefined behavior.
+*   If T1 locks the Mutex M, T2, T3 will be blocked if they tries to lock M.
+*   If T1, T2 are blocked to acquire lock on already Mutex M, the OS scheduling policy will decide which thread(i.e. among T1 ot T2) would acquire the lock on M when M is unlocked by its owner.
+*   If thread T attempts to double lock the Mutex M, it will self-deadlocked.
+*   You must try writing small programs and verify above Rules/behavior by yourself,
+*   Mutexes must be unlocked in LIFO order (Recommendation)
+
+#### Mutex Locking Types
+
+    1.  Code Locking (Static) - locking the part of the code section
+    2.  Data Locking (Run Time) - locking the data structure where same list can be used by student and employee so T1 thread locks the list and work on employee, T2 thread locks the same list and work on student 
+
+*   If you need to protect a code snippet against concurrent thread unsafe access, go for "Code Locking".
+*   If you need to protect object against concurrent thread unsafe access, go for "Object Locking".
+
+##### Code Locking Example
+
+```bash
+char global_buffer[256];
+static pthread_mutex_t mutex;
+void pkt_receive(char *pkt, int pkt_size)
+{
+    pthread_mutex_lock(&mutex);
+    memset(global_buffer, 0, sizeof(global_buffer));
+    memcpy(global_bufffer, pkt, pkt_size);
+    forward_pkt(global_buffer,pkt_size);
+    pthread_mutex_unlock(&mutex);
+}
+```
+
+##### Data Locking Example
+
+```bash
+vodi delete_node_from_list(list lst, int a)
+{
+    pthread_mutex_lock(&lst->mutex);
+    node_t *node = search_node(lst, a);
+    remove_node(node);
+    free(node);
+    pthread_mutex_unlock(&lst->mutex);
+}
+```
+### Deadlocks
+
+*   Deadlock is a situation where nobody makes a progress, and gets blocked for forever.
+*   Threads may undergo Deadlock if they are wrongly synchronized.
+
+#### 4 Necessary Conditions for Deadlocks
+
+**1. Mutual Exclusion:**    One or more than one resources are non-shareable (Only one thread can use at a time)
+
+**2. Hold and Wait:**       A thread is holding at least one resources and waiting for other resources.
+
+**3. No Preemption:**       A resources cannot be taken from a thread unless the thread releases the resources.
+
+**4. Circular Wait:**       A set of threads are waiting for each other in circular form.
+
+### Condition Variables
+
+Inorder to protect the Critical Section we use Mutex. But there are scenarios where we need to have synzhronisation for non CS also. For that we use condition variables
+
+#### Analogy:
+
+*   You would want to wait from havaing a delicious meal, unless it is cooked fully.
+*   You would not buy expensive headphones until your next salary.
+*   We always wait in our day to day life until some condition is satisified, right? Its natural
+
+#### Blocking a thread using Condition Variable(CV)
+
+*   A thread blocks itself using CV in 2 steps:
+    *   Step 1: Lock a mutex
+    *   Step 2: Invoke "pthread_cond_wait"
+    
+    **T1**
+    ```bash
+    pthread_mutex_t mutex;  //  created a mutex variable
+    pthread_cond_t cv;      //  created a conditon variable
+
+    pthread_mutex_init(&mutex,NULL);    //  init the mutex variable
+    pthread_cond_init(&cv,NULL);        //  init the condition variable
+
+    ....
+    printf("T1 is getting blocked");
+    pthread_mutex_lock(&mutex);         //  lock the mutex
+    pthread_cond_wait(&cv, &mutex);     //  T1 is blocked, unlocked the mutex and waiting for signal from signalling thread
+    // once the signal is received then it will move to ready to execute state, wait for mutex release of signalling thread
+    // once the mutex is released by the signalling thread then the remaining code will execute
+    printf("T1 is awakened");
+    pthread_mutex_unlock(&mutex);       //  unlock the mutex
+    ```
+#### Signalling a blocked thread
+
+*   A thread signal to the blocked thread using CV, involves 3 steps:
+    *   Lock the mutex
+    *   Invoke pthread_cond_signal
+    *   Unlock mutex
+
+    **T2**
+    ```bash
+    ....
+    pthread_mutex_lock(&mutex);         //  lock the mutex
+    pthread_cond_signal(&cv);           //  
+    pthread_mutex_unlock(&mutex);       //  unlock the mutex
+    ```
+
+*   When thread invokes pthread_cond_wait(), two things happen:
+    1.  Thread gets blocked (job of CV)
+    2.  Mutex ownership is snatched from calling thread and it is declared as available.
+
+*   When blocked Thread receives signal:
+    1.  It slips into ready to execute state and wait for mutex release signal from signalling thread.(This will happen after the pthread_mutex_unlock(&mutex) in signalling thread)
+    2.  It is given a lock on mutex as soon as mutex is released by signalling thread.
+    3.  Thread resumes execution.
+
+#### Producer Consumer Introduction
+
+##### Producer Consumer with some limitation
+
+* Where this will work for one consumer and one producer
+* S4 will only execute if the T2 unlock the mutex. If we have mutliple threads as consumer and after T2 unlocks mutex we are not sure which consumer thread will execute becauese its depends on the OS.
+* If S4 executes on oen thread then dequeue opratation makes the queue empty, thereby other threads will opertate on empty queue which created some undefined results.
+
+![Producer Consumer Limitation](./Producer_Consumer_Limitation.jpg)
+
+##### Producer Consumer correct implementation
+
+* creating a "while" loop in the q_empty instead of "if" conditional statement makes the threads to check always even after if we have multiple consumer threads. Thereby thread can only operate on queue when it is empty.
+
+![Producer Consumer Correct Implementation](./Producer_Consumer_Correct.jpg)
+
+![Producer Consumer Correct Pseudocode Implementation](./Producer_Consumer_Correct_Pseudocode.jpg)
+
+#### Spurious Wakeup
+
+![Spurious Wakeup](./Spurious_Wakeup.jpg)
+
+#### Conditional Variable Wait and Signal Analogy
+
+![Wait Signal Scenarios](./Wait_Signal_Scenarios.jpg)
+
+![Wait Signal Full Steps](./Wait_Signal_FullSteps.jpg)
+
+#### Multiple Condition Variables
+*   Mutex is always a property of a resource (Shared Data or code) and Condition Variable could be a property of resource (Shared Data or code) or thread.
+
+![Multiple Conditional Variable](./Multiple_CV.jpg)
+
+![Single Conditional Variable](./Single_CV.jpg)

@@ -58,6 +58,7 @@ int maxDepth(Node* root) {
     if(root == nullptr) {
         return 0;
     }
+    /*********** Iterative Approach ***************/
     std::queue<Node *> q;
     q.push(root);
     int level = 0;
@@ -71,7 +72,30 @@ int maxDepth(Node* root) {
         }
         level++;
     }
-    return level;
+    return level; 
+    //////////////////////////////////////
+
+    /********** Recursive Approach *****************/
+    int lh = maxDepth(root->left);
+    int rh = maxDepth(root->right);
+    return 1 + std::max(lh,rh);
+    ////////////////////////////////////
+}
+
+int dfsHeight(Node* root) {
+    if(root == NULL) return 0;
+
+    int lh = dfsHeight(root->left);
+    if(lh == -1) return -1;
+    int rh = dfsHeight(root->right);
+    if(lh == -1) return -1;
+
+    if(abs(lh - rh) > 1) return -1;
+    return 1 + std::max(lh, rh);
+}
+
+bool isBalancedTree(Node* root) {
+    return dfsHeight(root) != -1;
 }
 
 int main(int argc, char *argv[]) {
@@ -86,5 +110,10 @@ int main(int argc, char *argv[]) {
         std::cout<<std::endl;
     }
     std::cout<<"Maximum Depth is : "<<maxDepth(root)<<std::endl;
+    if(isBalancedTree(root)) {
+        std::cout<<"Balanced Binary Tree"<<std::endl;
+    } else {
+        std::cout<<"Not a Balanced Binary Tree"<<std::endl;
+    }
     return 0;
 }

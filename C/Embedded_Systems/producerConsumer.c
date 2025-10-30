@@ -1,3 +1,4 @@
+/*************************************** Example 1 ***********************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -156,3 +157,92 @@ int main() {
     destroy_buffer(&queue);
     return 0;
 }
+/*************************************************************************************/
+
+/*********************************** Basic Producer Consumer Examples *****************************/
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+#define BUFFER_SIZE 5
+
+typedef struct {
+    int buffer[BUFFER_SIZE];
+    int count;
+    int in;
+    int out;
+    pthread_mutex_t mutex;
+    pthread_cond_t not_full;
+    pthread_cond_t not_empty;
+} bounded_buffer_t;
+
+bounded_buffer_t bb = {
+    .count = 0,
+    .in = 0,
+    .out = 0,
+    .mutex = PTHREAD_MUTEX_INITIALIZER,
+    .not_full = PTHREAD_COND_INITIALIZER,
+    .not_empty = PTHREAD_COND_INITIALIZER
+};
+
+void produce(int item) {
+    pthread_mutex_lock(&bb.mutex);
+    
+    // Wait while buffer is full
+    while (bb.count == BUFFER_SIZE) {
+        printf("Buffer full, producer waiting...\n");
+        pthread_cond_wait(&bb.not_full, &bb.mutex);
+    }
+    
+    // Add item to buffer
+    bb.buffer[bb.in] = item;
+    bb.in = (bb.in + 1) % BUFFER_SIZE;
+    bb.count++;
+    
+    printf("Produced: %d (buffer count: %d)\n", item, bb.count);
+    
+    // Signal that buffer is not empty
+    pthread_cond_signal(&bb.not_empty);
+    
+    pthread_mutex_unlock(&bb.mutex);
+}
+
+int consume() {
+    pthread_mutex_lock(&bb.mutex);
+    
+    // Wait while buffer is empty
+    while (bb.count == 0) {
+        printf("Buffer empty, consumer waiting...\n");
+        pthread_cond_wait(&bb.not_empty, &bb.mutex);
+    }
+    
+    // Remove item from buffer
+    int item = bb.buffer[bb.out];
+    bb.out = (bb.out + 1) % BUFFER_SIZE;
+    bb.count--;
+    
+    printf("Consumed: %d (buffer count: %d)\n", item, bb.count);
+    
+    // Signal that buffer is not full
+    pthread_cond_signal(&bb.not_full);
+    
+    pthread_mutex_unlock(&bb.mutex);
+    return item;
+}
+
+void* producer_thread(void* arg) {
+    for (int i = 1; i <= 10; i++) {
+        produce(i);
+        usleep(100000); // 100ms
+    }
+    return NULL;
+}
+
+void* consumer_thread(void* arg) {
+    for (int i = 0; i < 10; i++) {
+        consume();
+        usleep(150000); // 150ms
+    }
+    return NULL;
+}
+/*************************************************************************************/

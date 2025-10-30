@@ -493,3 +493,52 @@ Inorder to protect the Critical Section we use Mutex. But there are scenarios wh
 
 *   In the above example Ts thread did the broadcast and T1, T2 and, T3 where receiver thread which receives the broadcast signal and Lets say the OS executes in the order of T2, T1 and T3 order. So first T2 moves from Blocked to ready to execute to execute and then T1 and the T3.
 
+### Thread Barrier
+
+<<< Yet to update >>>
+
+### Spin Locks
+
+*   Spin lock is more or like same as mutex with one advantage.
+*   Mutexes : Thread T1 applied a lock to CS and working on it, if thread T2 tries to apply lock then it wont get a chance to lock it. So OS scheduler will remove the T2 via context switching. Once the thread T1 finshed its opertaion and release the mutex then only thread T2 will be schdeuled again in the OS.
+*   Spin Lock : Like the above case thread T1 is working on after applied the lock, thread T2 will not be removed from the scheduling instead T2 will execute some NO-OP (while(1);) so scheduler will not remove the T2. Once the T1 releases mutex lock then T2 will get a chance to apply mutex lock.
+*   Removing the thread from scheduling and processing again in OS is costlier operation in OS perspective, so some scenarios we need spin lock instaed of mutexes.
+
+#### When to use Spin Locks over Normal Mutexes
+
+*   We prefer to use spin locks in the scenarios where CS is very insignificant.
+*   For example, CS includes only setting/reading some flag.
+*   Using spin locks to protect insignificant CS yield better performance as compared to Normal Mutexes
+*   Obviously, overuse of psin locks is a waste of CPU cycles.
+*   We use spin locks just like Normal Mutexes to safe guard CS.
+*   Spin locks cannot be used along with **Conditional Variables**.
+*   **Note:** While reading on internet, do not get confused with kernel version of spin locks! Here, we are talking only about user space spin locks.
+
+### Semaphore
+*   Mutex allows only one thread at a time to execute in the critical section but, semaphore allows n number of threads to be executed in the critical section.
+*   If semaphore count during intialisation is 1 then it is a binary semaphore where it is just like mutex. But during sempost a signal will be sent to the thread which is waiting for CS at semwait but it is not the case in mutex. In mutex thread which locks it has to unlock it. In semaphore once a thread is done executing will send a signal to the thread which is waiting, if no thread is waiting then it wille exit without sending a signal.
+*   **Note:** If any thread is waiting in semwait then only it will receive the signal from sempost, if not the thread which is executing the CS will finish and exit, it wont send any signal as there is no thread in wait state.
+*   Internal implementation is like sem_wait decrement the semaphore count and sem_post increment the semaphore count.
+
+#### Strict Alternation using semaphore
+*   This can be implemented by making the sem_init(&semaphore_handler, 0, 0), which is "Zero Semaphore". Below T1 and T2 are the implementation of the "Strict Alternation" concept using semaphore.
+
+    **Example :**
+
+     **T1**
+    ```bash
+    for(inti = 1; i < 15; i += 2) {
+       printf("%d\n",i);
+       sem_post(sem0_1);
+       sem_wait(sem0_2);
+    }
+    ```
+     **T2**
+    ```bash
+    for(inti = 2; i < 15; i += 2) {
+       sem_wait(sem0_1);
+       printf("%d\n",i);
+       sem_post(sem0_2);
+    }
+    ```
+    

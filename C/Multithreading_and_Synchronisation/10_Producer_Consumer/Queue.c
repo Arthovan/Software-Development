@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Queue_t* initQ(){
+struct Queue_t* initQ(void){
 	struct Queue_t *q = calloc(1, sizeof(struct Queue_t));
 	q->rear = 0;
 	q->front = q->rear;

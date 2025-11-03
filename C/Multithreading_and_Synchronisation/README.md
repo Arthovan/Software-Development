@@ -541,4 +541,86 @@ Inorder to protect the Critical Section we use Mutex. But there are scenarios wh
        sem_post(sem0_2);
     }
     ```
+#### Semaphore API
+```bash
+    semt_t semaphore_Handler;
+    sem_init(&semaphore_Handler, process/thread, permit_Counter);
     
+    sem_wait(semaphore_Handler);
+    /* Critical Section operation */
+    sem_post(semaphore_Handler);
+```
+*   semaphore_Handler is a variable which is created by "sem_t". Proces means "1" and thread means "0". permit_Counter is a number of semaphore which can access the critical section, which is decremented by sem_wait() and incremented by sem_post() APIs.
+
+#### Types of Semaphores
+
+![Types of Semaphore](./Semaphore_Types.jpg)
+
+**1. Unnamed Semaphore**
+
+**✅ Definition**
+
+An unnamed semaphore exists only in your program’s memory.
+It is used mainly for thread synchronization (within the same process).
+
+**💡 Key points:**
+
+*   Declared as a variable (e.g., sem_t mySem;)
+
+*   Initialized with sem_init()
+
+*   Destroyed with sem_destroy()
+
+*   Can be placed in shared memory if you need to use it between processes
+
+**2. Named Semaphore**
+
+**✅ Definition**
+
+A named semaphore is identified by a name string (like a file path) and managed by the kernel.
+It can be used for inter-process synchronization.
+
+**💡 Key points:**
+
+*   Created/opened with sem_open()
+
+*   Name starts with '/' (e.g. "/mysem")
+
+*   Closed with sem_close()
+
+*   Removed (deleted) with sem_unlink()
+
+#### Weak and Strong Semaphore
+
+*   Semaphore can be defined as weak semaphore or strong semaphore as per the way the blocked threads are handled
+*   Weak Semaphore : Lets say Threads T2, T3 are is waiting state and new Thread T4 comes into wait state tooo. If thread T1 gives a signal(sem_post) then T4 get the access likewise T5, T6 and so on get the access to the critical section. Thereby T2 and T3 never gets a CS as long as new thread comes to wait state. This is because OS allocates the thread scheduling randomly. This kind of semaphores are called Weak Semaphore.
+*   Strong Semaphore : Instead of handling the threads in wait state randomly, if it is handled in FIFO order then those semaphores are called as Strong Semaphore.
+*   Weak Semaphore can be converted to strong semaphore if we implement the FIFO based scheduling of waiting threads.
+
+**Note :** 
+1. "Bounded waiting" means finite amount to time wait for waiting threads. Eventually all the wait threads will get a chance to access the CS.
+2. Still now whatever mutex and semaphore which we used are weak semaphore and OS has its internal bounded time and it schedules the thread in waiting state with specific time to execute in CS. So we can tell only theoretically that is weak semaphore cant prove it.
+
+![Weak and Strong Semaphore](./weak_strong_semaphore.jpg)
+
+### Recursive Mutexes
+
+*   We know that a normal mutex, which is already locked cannot be locked again by same thread. Any attempt to lock already locked normal mutex by same thread leads to deadlock.
+*   Recursive mutex, works like normal mutex only, the only difference is that it can be locked by same thread many number of times.
+*   A thread has to unlock as many times as it has locked it.
+*   APIs for Recursive mutexes
+
+```bash
+    pthread_mutex_t Mutex;
+    pthread_mutexattr_t Attr;
+
+    pthread_mutexattr_init(&Attr);
+    pthread_mutexattr_settype(&Attr, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&Mutex, &Attr);
+```
+
+#### Scenarios for using Recursive Mutexes
+
+*   In big projects, developers write functions independently. Every function associated to some task. There are chances that one function which is using some shared resources can call other function which needs the same shared resources. Inorder to protect the shared resources Mutexes might have used in it.
+
+![Recursive Mutex](./Recursive_Mutexes.jpg)

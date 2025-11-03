@@ -26,7 +26,7 @@ void thread_create(pthread_t *pthread_handle, int thread_ID) {  // not a actual 
     pthread_attr_t attribute;   //  this variable is used to specify the properties of the new variable that is created
     pthread_attr_init(&attribute);
     /*  PTHREAD_CREATE_JOINABLE =   Joinable thread
-        PTHREAD_CREATE_DETACHED =   Detached thread*/
+        PTHREAD_CREATE_DETACHED =   Detached thread */
     pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);   //  API to set the thread state as joinable or detached
     /////////////////////////////////////////////////////////////////////
 

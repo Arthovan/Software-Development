@@ -624,3 +624,104 @@ It can be used for inter-process synchronization.
 *   In big projects, developers write functions independently. Every function associated to some task. There are chances that one function which is using some shared resources can call other function which needs the same shared resources. Inorder to protect the shared resources Mutexes might have used in it.
 
 ![Recursive Mutex](./Recursive_Mutexes.jpg)
+
+### Read Write Locks
+
+*   Consider three threads in a program:
+    *   T1  -   Compute the sum of all elements of the array
+    *   T2  -   Compute the product of all elements of the array
+    *   T3  -   Square each element of the array
+
+#### Normal Mutexes
+
+```bash
+/**************** T1 *****************/
+int sum(int *arr, int size) {
+    int i,sum = 0;
+    pthread_mutex_lock(&m);
+    for(i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    pthread_mutex_unlock(&m);
+    return sum;
+}
+/************************************/
+
+/**************** T2 *****************/
+int sum(int *arr, int size) {
+    int i,sum = 0;
+    pthread_mutex_lock(&m);
+    for(i = 0; i < size; i++) {
+        mul *= arr[i];
+    }
+    pthread_mutex_unlock(&m);
+    return sum;
+}
+/************************************/
+
+/**************** T3 *****************/
+int sum(int *arr, int size) {
+    int i,sum = 0;
+    pthread_mutex_lock(&m);
+    for(i = 0; i < size; i++) {
+        arr[i] *= arr[i];
+    }
+    pthread_mutex_unlock(&m);
+}
+/************************************/
+```
+*   T1 and T2 perform read operations, hence should be allowed without blocking each other.
+*   But in this case eithre of three threads execute at any time t in CS.
+*   Read/ write locks (mutexes) allow multiple threads to enter CS simultaneously.
+
+#### Read/Write Mutexes
+
+```bash
+/**************** T1 *****************/
+int sum(int *arr, int size) {
+    int i,sum = 0;
+    rdlock(&wrlock);    //  read lock
+    for(i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    unlock(&wrlock);
+    return sum;
+}
+/************************************/
+
+/**************** T2 *****************/
+int sum(int *arr, int size) {
+    int i,sum = 0;
+    rdlock(&wrlock);    //  read lock
+    for(i = 0; i < size; i++) {
+        mul *= arr[i];
+    }
+    unlock(&wrlock);
+    return sum;
+}
+/************************************/
+
+/**************** T3 *****************/
+int sum(int *arr, int size) {
+    int i,sum = 0;
+    wrlock(&wrlock);        //  write lock
+    for(i = 0; i < size; i++) {
+        arr[i] *= arr[i];
+    }
+    unlock(&wrlock);
+}
+/************************************/
+```
+*   Using normal locks(normal mutexes), only one thread can perform opeeration on an array at a time
+*   Using read/write locks, thread T1 and T2 can execute in parallel on different CPUs without getting blocked( Greate performance improvement).
+*   Read/Write locks allows multiple reader threads to execute in CS.
+*   Notice, thread need to specify the type of lock it wants to have - Read lock or write lock on lock variable
+
+#### Posix APIs provide inbuilt Read/Write locks
+
+*   Declaration:                    pthread_rwlock_t rwlock;
+*   Initialization:                 pthread_rwlock_init(&rwlock, NULL);
+*   Obtaining Read lock:            pthread_rwlock_rdlock(&rwlock);
+*   Obtaining Write lock:           pthread_rwlock_wrlock(&rwlock);   
+*   Releasing the write/read lock:  pthread_rwlock_unlock(&rwlock);
+*   Destroying the lock:            pthread_rwlock_destroy(&rwlock);

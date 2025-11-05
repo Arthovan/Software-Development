@@ -13,19 +13,19 @@
 typedef void (*task_func)(int);
 
 // ------------------ Ring Buffer Structure ------------------
-typedef struct {
+typedef struct RingBuffer{
     task_func buffer[BUFFER_SIZE];
     int args[BUFFER_SIZE];
-    int head;
-    int tail;
-    int count;
+    int head;   // Next write position
+    int tail;   // Next read position
+    int count;  // Number of items in the buffer
     bool done; // Flag to signal no more tasks will be produced
     pthread_mutex_t mutex;
     pthread_cond_t not_full;
     pthread_cond_t not_empty;
-} RingBuffer;
+} RingBuffer_t;
 
-RingBuffer queue;
+RingBuffer_t queue;
 
 // ------------------ Example Task Functions ------------------
 void print_task(int n) {
@@ -39,6 +39,7 @@ void square_task(int n) {
 }
 
 // ------------------ Ring Buffer Operations ------------------
+/* Initialize the ring buffer */
 void init_buffer(RingBuffer *q) {
     q->head = q->tail = q->count = 0;
     q->done = false;
@@ -47,12 +48,14 @@ void init_buffer(RingBuffer *q) {
     pthread_cond_init(&q->not_empty, NULL);
 }
 
+/* Destroy the ring buffer */
 void destroy_buffer(RingBuffer *q) {
     pthread_mutex_destroy(&q->mutex);
     pthread_cond_destroy(&q->not_full);
     pthread_cond_destroy(&q->not_empty);
 }
 
+/* Write data into the ring buffer (producer) */
 void enqueue(RingBuffer *q, task_func func, int arg) {
     pthread_mutex_lock(&q->mutex);
     while (q->count == BUFFER_SIZE)
@@ -67,6 +70,7 @@ void enqueue(RingBuffer *q, task_func func, int arg) {
     pthread_mutex_unlock(&q->mutex);
 }
 
+/* Read data from the ring buffer (consumer) */
 bool dequeue(RingBuffer *q, task_func *func, int *arg) {
     pthread_mutex_lock(&q->mutex);
     while (q->count == 0 && !q->done)

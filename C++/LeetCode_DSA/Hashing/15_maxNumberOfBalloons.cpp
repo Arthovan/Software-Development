@@ -36,7 +36,7 @@ int rearrangeCharacters(string s) {
         tarFreq[ele]++;     //  store the "balloon" string frequency count
     }
     for(auto [key,value]:tarFreq){  //Iterate through the "ballon" string and its character count
-        minVal = min(minVal,inFreq[key]/value); // because l and o repeats 2 times so we are dividing value / value so we can get proper output
+        minVal = min(minVal,inFreq[key]/value); // because "l" and "o" repeats 2 times in string "balloon"so we are dividing in freq value / value so we can get proper output
     }   
     return minVal;   
 }

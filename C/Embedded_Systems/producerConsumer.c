@@ -19,7 +19,7 @@ typedef struct RingBuffer{
     int head;   // Next write position
     int tail;   // Next read position
     int count;  // Number of items in the buffer
-    bool done; // Flag to signal no more tasks will be produced
+    bool done;  // Flag to signal no more tasks will be produced
     pthread_mutex_t mutex;
     pthread_cond_t not_full;
     pthread_cond_t not_empty;

@@ -40,7 +40,7 @@ void explainVector() {
     }
     cout<<endl;
 
-    //travese the vector using iterator with auto keyword
+    //traverse the vector using iterator with auto keyword
     auto bItr = vec.begin();            //  Iterator beginItr will holds the first element address
     auto eItr = vec.end();              //  Iterator endItr will always holds the next element of end element, remember this 
     for(auto i = bItr; i < eItr; i++) { // as the endItr holds the ends next element thats why we used i < endItr here

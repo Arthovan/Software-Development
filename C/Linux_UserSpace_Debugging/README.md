@@ -1743,3 +1743,4 @@ To show the library calls related to child process, use -f options together with
 ```bash
 $ ltrace -f ./a.out # to show the information about child process
 ```
+```

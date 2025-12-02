@@ -26,7 +26,7 @@ class Rectangle {
 };
 
 // In normal_Pointer a memory leak occurs because memory is allocated but not freed after use
-void normal_Pointer(){
+void normal_Pointer() {
    int *ptr = new int;
 }
 /* 1. auto_ptr
@@ -40,8 +40,8 @@ name: Name assigned to the pointer
 void auto_Pointer() {
     // Pointer declaration
     auto_ptr<int> ptr1(new int(10));
-    cout<<*ptr1<<endl;
-     // Transfer ownership to pointer ptr2
+    cout<< *ptr1<<endl;
+    // Transfer ownership to pointer ptr2
     auto_ptr<int> ptr2 = ptr1;
     cout << *ptr2<<endl;
     // Note: auto_ptr is deprecated after C++11 and it remove after C++ version 17.

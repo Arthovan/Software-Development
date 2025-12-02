@@ -19,13 +19,13 @@ int minStartValue(vector<int>& nums) {
         minSum = min(minSum, sum);  // as we are tracking the min value in every iteration thereby we can get the exact minvalue in preSum
     }
     if(minSum < 0) 
-        return 1-minSum;
+        return 1 - minSum;
     return 1;
 }
 
 int main(int argc, char*argv[]){
-    vector<int> nums = {-3,2-3,4,2};
-    cout<<"Minimum positive value is : "<<minStartValue(nums);
+    vector<int> nums = {-3,2,-3,4,2};
+    cout<<"Minimum positive value is : "<<minStartValue(nums)<<endl;
     return 0;
 }
 

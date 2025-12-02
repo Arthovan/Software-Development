@@ -168,7 +168,7 @@ elif basic == 10: ################## Ex 10: File System
         print(lines)
     file.close() # Close the file descriptor
 
-
+oops = 7
 """ ******************************** Python - OOP ****************************** """
 if oops == 1:    ################# Ex 1: Python data type is a class ############################
     item = 'phone' # All data types of python are associated with the instances of classes like string, integer, float,
@@ -202,7 +202,7 @@ elif oops == 3:  ################## Ex 3: Magic method or default method or cons
             self.quantity = quantity # assigned the quantity to the object quantity
 
         def calculate_total_price(self):
-            return self.price * self.quantity                       
+            return self.price * self.quantity                     
 
     product1 = Item("phone",100,5)
     val = product1.calculate_total_price()
@@ -325,11 +325,18 @@ elif oops == 7:  ################## Ex 7: Represent a object in user defined way
             return f"Item('{self.name}',{self.price},{self.quantity})"
 
     product1 = Item("Phone", 100, 4)
+    product1.temp_val = 10
+    print(product1.temp_val)
+    #print(Item.temp_val)
     Product2 = Item("Laptop", 1000,3)
     product3 = Item("Cable", 10, 5)
     product4 = Item("Mouse", 50, 7)
-    product5 = Item("Keyboard", 75, 2)
-    print(Item.all) 
+    product5 = Item("Keyboard", 75)
+    print(product5.quantity)
+    product6 = Item("Keyboard", 8, -67)
+    print(product6.quantity)
+    print(product6.price)
+    print(Item.all)
 
 elif oops == 8 :################## Ex 8: Why object name is the 1st parameter in class methods ######################### 
     """ By default while calling a method in the class, the object name will be passed as an 1st argument

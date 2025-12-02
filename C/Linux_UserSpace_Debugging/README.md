@@ -326,7 +326,7 @@ ps -- process status. Provides information about currently running processes, in
 When ps is used without any option, it provides information about two processes : shell and ps
 
 ```bash
-panther2@ubuntu:/tmp$ ps
+$ ps
    PID TTY          TIME CMD
  39235 pts/11   00:00:01 bash
  47154 pts/11   00:00:00 ps
@@ -1742,4 +1742,5 @@ To show the library calls related to child process, use -f options together with
 
 ```bash
 $ ltrace -f ./a.out # to show the information about child process
+```
 ```

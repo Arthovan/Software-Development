@@ -14,10 +14,12 @@ vector<bool> subarraySum(vector<int> arr, vector<vector<int>> queries, int limit
     for(int i = 1;i < arr.size();i++){
         preSum.push_back(preSum.back()+arr[i]);
     }
+    /// only to print the presum, not a part of core logic//////////
     cout<<"preSum : ";
     for(int ch : preSum)
         cout<<ch<<",";
     cout<<endl;
+    ///////////////////////////////////////////////////////////////
 
     vector<bool> ans;
     for(vector<int> query : queries){

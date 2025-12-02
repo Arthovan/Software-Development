@@ -44,7 +44,7 @@ void init_buffer(RingBuffer *q) {
     q->head = q->tail = q->count = 0;
     q->done = false;
     pthread_mutex_init(&q->mutex, NULL);
-    pthread_cond_init(&q->not_full, NULL);
+    pthread_cond_init(&q->not_full, NULL)
     pthread_cond_init(&q->not_empty, NULL);
 }
 

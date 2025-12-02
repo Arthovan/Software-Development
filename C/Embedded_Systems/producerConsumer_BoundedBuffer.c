@@ -21,7 +21,7 @@ bounded_buffer_t *mb;
 void init_buffer(void) {
     // Allocate memory for the buffer structure
     mb = (bounded_buffer_t*)malloc(sizeof(bounded_buffer_t));
-   // Initialize all buffer elements to 0
+    // Initialize all buffer elements to 0
     for(int i = 0; i < BUFFER_SIZE; i++) {
         mb->buffer[i] = 0;
     }

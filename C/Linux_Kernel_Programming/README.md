@@ -12,23 +12,7 @@ A device driver operates on three interfaces:
 * Hardware Interface: Direct communication with physical hardware
 * User Interface: Provides access to user-space applications
 
-```bash
-	****************
-	   User	        ---------
-	****************        |
-		|                   |
-		|                   |
-		|                   |
-	****************        | 
-	   	Kernel          Via Device File
-	****************        |
-		|                   |
-		|Device Driver      |
-		|                   |
-	****************        |            |
-	   Hardware     ---------
-	****************
-```
+    ![Kernel](./Kernel.jpg)
 
 # Kernel Modules Explained
 

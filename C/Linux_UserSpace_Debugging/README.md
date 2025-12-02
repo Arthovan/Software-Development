@@ -326,7 +326,7 @@ ps -- process status. Provides information about currently running processes, in
 When ps is used without any option, it provides information about two processes : shell and ps
 
 ```bash
-panther2@ubuntu:/tmp$ ps
+$ ps
    PID TTY          TIME CMD
  39235 pts/11   00:00:01 bash
  47154 pts/11   00:00:00 ps

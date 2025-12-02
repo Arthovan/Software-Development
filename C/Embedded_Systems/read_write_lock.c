@@ -1,5 +1,5 @@
 /*********************** Read  Write Lock *********************
-This examople is implemented with the below considerations 
+This example is implemented with the below considerations 
 
 *   A read-write lock allows multiple readers to hold the lock simultaneously (shared access).
 

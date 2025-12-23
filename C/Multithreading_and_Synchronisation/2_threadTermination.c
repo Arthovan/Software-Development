@@ -14,7 +14,7 @@ Thread Termination : A thread can terminate in 3 ways
 */
 #include<stdlib.h>
 #include<stdio.h>
-#include<unistd.h>      //  contains sleep function, mostly contains linux realted stuffs
+#include<unistd.h>      // contains sleep function, mostly contains linux related stuffs
 #include<pthread.h>     // library contains the pthreads
 
 void* thread_fn_callback(void *arg) {
@@ -36,11 +36,12 @@ void thread1_create() {
     Do not pass some local variable or stack memory */
     static char *thread_input1 = "I am thread no 1";
 
-    /* pthread_create() returns 0 on success, othrewise returns error code, all pthread functions returns -ve error code on failure. They do not set global variable.
-        pthread1                    =   thread handler
+    /* pthread_create() returns 0 on success, otherwise returns error code, all pthread functions returns -ve error code on failure. They do not
+    set global variable.
+        thread1                     =   thread handler
         NULL
         thread_fn_callback          =   Pointer to the function 
-        input data to the thread    =   data that can be passed to thread as an argument and it should be of static or heap memory but not from stack. Reasson is after this pthread_create call the new thread is going to be created if the passed value is local and the called thread dies then there wont be any local value as the function dies already. This behaviour can be catostrophic in reading the data in thread as an argument. */
+        thread_input1			    =   (input data to the thread) Data that can be passed to thread as an argument and it should be of static or heap memory but not from stack. Reason is after this pthread_create call the new thread is going to be created if the passed value is local and the called thread dies then there wont be any local value as the function dies already. This behaviour can be catostrophic in reading the data in thread as an argument. */
     int rc = pthread_create(&thread1, NULL, thread_fn_callback, (void*)thread_input1);
 
     if(rc != 0) {
@@ -54,5 +55,5 @@ int main(int argc, char* argv[]) {
     printf("Main function paused\n");
     
     pthread_exit(0);    //  if we use pthread_exit(0), it just terminate the thread which is calling without affecting other threads in our case it terminates the main thread safely and didnt affect the child thread
-    printf("Done\n");   //  this wont print in the termainal because the main terminates in the line where pthread_exit(0) in called, also we can see clearly that child thread runs without any effect.
+    printf("Done\n");   //  this wont print in the terminal because the main terminates in the line where pthread_exit(0) is called, also we can see clearly that child thread runs without any effect.
 }

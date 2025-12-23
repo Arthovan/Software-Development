@@ -1,6 +1,66 @@
-# Compilation of pthreads
+# Thread
+## Compilation of pthread programs in C
 
-*   Ex :  gcc -pthread main.c -o main
+To compile a C program that uses POSIX Threads (pthreads), you must link the pthread library while using gcc.
+
+Use the command below:
+
+```bash
+gcc -pthread main.c -o main
+```
+### What this does:
+
+**-pthread flag**   -   Adds required threading support and links against the pthread library
+
+**main.c**  -   Your source file containing pthread code
+
+**-o main** -   Output executable will be named main
+
+### Alternative valid compile options
+
+(Some older systems use these)
+
+```bash
+gcc main.c -lpthread -o main
+```
+
+**Note :** Both -pthread and -lpthread work, but
+-pthread is recommended because it also enables thread-safe compiler options.
+
+A thread is the fundamental unit of CPU execution within a computer system.
+Every process contains at least one thread, known as the main thread, which begins execution at the main() function.
+
+A thread always runs inside a process and uses the process resources, such as:
+
+*   Code segment
+*   Data segment (global/static variables)
+*   Heap memory
+*   Open files and other OS resources
+
+However, each thread has its own:
+
+*   Program Counter (instruction pointer)
+*   CPU registers
+*   Private stack (local function variables, return addresses)
+
+Threads can create additional threads, forming a multi-threaded process.
+There is no limit (except OS constraints) to how many threads can be created:
+
+```
+Process
+   └── Main Thread
+          ├── Thread-1
+          │     ├── Thread-1A
+          │     └── Thread-1B
+          └── Thread-2
+```
+
+All threads in the same process:
+
+*   Run independently
+*   Execute different or same code paths
+*   Share process memory & resources
+*   Communicate efficiently through shared data
 
 ## API's
 

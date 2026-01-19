@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     pthread_join(pthread2, &thread_result2);    //  the 2nd argument is the return from the thread fn callback which we need to store in void pointer
     if(thread_result2) {
         printf("Return result from thread 2 = %d\n", *(int*)thread_result2);
-        free(thread_result2);   // we freed the thread fn callback allocated memeory 
+        free(thread_result2);   // we freed the thread fn callback allocated memory 
         //thread_result2 = NULL;  //  but our local void pointer should point to something after we freed the memory of where it pointing to
     }
 

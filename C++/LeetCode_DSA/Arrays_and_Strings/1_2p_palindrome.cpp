@@ -11,7 +11,7 @@ using namespace std;
 bool isPalindrome(string str){
     string temp;
     int i=0,j=str.length()-1;
-    for(char ch : str){
+    for(char ch : str) {
         if(isalnum(ch)){
             temp += tolower(ch);
         }

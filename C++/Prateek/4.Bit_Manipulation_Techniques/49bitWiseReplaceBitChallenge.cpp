@@ -14,7 +14,8 @@ using namespace std;
 */
 void clearBitsInRange(int &M, int i, int j){    // j is 3 for our case, j+1 is 4 times shifting
     int a = (-1)<<(j+1);    //  1111 1111 << (j+1)  ===> 1111 0000
-    int b = (1<<i)-1;       // "i" is 1,  and I should have value 1 in all bits before "i" so shifting 1 "i" times and minus 1 will give us the result. Ex: 1 << 3 times is 8 and it is 1000, 8-1 is 7 so it is 0111. Thereby I can have 1 before "i" elements
+    int b = (1<<i)-1;       // "i" is 1,  and I should have value 1 in all bits before "i" so shifting 1 "i" times and minus 1 will give us the result. Ex: 1 << 3 times is 8 and it is 1000, 8-1 is 7 so it is 0111. Thereby I can have 1 before "i" elements. In our case "i" is 1 and 1 << 1 is 2, so 2 - 1 is 0000 0001.
+    // so adding 1111 0000 + 0000 0001 = 1111 0001. Now we can see that bits in the range i to j is cleared.
     int mask = a | b;
     M = M & mask;
 }

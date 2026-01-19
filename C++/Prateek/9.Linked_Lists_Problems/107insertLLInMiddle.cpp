@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class Node{
+class Node {
     public:
     int data;
     Node *next;
@@ -14,7 +14,7 @@ class Node{
     }
 };
 
-// Method to insert element at the head with the refernce method
+// Method to insert element at the head with the reference method
 void insertAtHead(Node* &headLL, int data){
     // if node is empty and we need to insert an element
     if(headLL == NULL){
@@ -35,8 +35,8 @@ void insertInMiddle(Node* &headMLL, int pos, int data){
     }
     else{
         Node *localMLL = headMLL;
-        for(int jump=0;jump<pos;jump++){
-            localMLL =localMLL->next;
+        for(int jump = 0; jump < pos; ++jump){
+            localMLL = localMLL->next;
         }
         Node *temp = new Node(data);
         temp->next = localMLL->next;

@@ -19,9 +19,9 @@ A device driver operates on three interfaces:
 **Historical Context**
 
 In early Linux systems, adding new functionality required:
-Modifying kernel source code
-Recompiling the entire kernel
-Rebooting the system
+* Modifying kernel source code
+* Recompiling the entire kernel
+* Rebooting the system
 
 **Modern Approach**
 
@@ -76,6 +76,7 @@ find . -name '*.ko' | wc -l
 
 * All device drivers are kernel modules
 * Not all kernel modules are device drivers
+
 Device drivers are a subset of kernel modules.
 
 ### Module Categories

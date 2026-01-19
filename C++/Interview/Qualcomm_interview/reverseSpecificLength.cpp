@@ -1,6 +1,6 @@
-/* K Reverse    :  Given a linked list, write a function to reverse every k nodes (where k is an input to the function).
+/* K Reverse    :  Given a linked list, write a function to reverse nodes from m to n. (where m is 3 and n is 5)
                 Input   :   1->2->3->4->5->6->7->8->Null
-                Output  :   3->2->1->6->5->4->8->7->Null
+                Output  :   1->2->3->6->5->4->7->8->Null
 */
 #include<iostream>
 #include<vector>
@@ -35,7 +35,7 @@ void displayLL(Node *headLL){
     cout<<endl;
 }
 
-void reverseLLIterative(Node* &headLL){
+void reverseLLIterative(Node* &headLL, int m, int n){
     Node *previousLL = NULL, *nextLL = NULL, *currentLL = headLL;
     while(currentLL != NULL){
         nextLL = currentLL->next;
@@ -50,7 +50,7 @@ void reverseLLIterative(Node* &headLL){
 Node* kReverseLL(Node *&headLL,int K){
     Node *previouLL = NULL, *nextLL = NULL, *currentLL = headLL;
     int cnt = 1;
-    while(currentLL != NULL and cnt <= K){
+    while(currentLL != NULL and cnt<=K){
         nextLL = currentLL->next;
         currentLL->next = previouLL;
 
@@ -66,11 +66,11 @@ Node* kReverseLL(Node *&headLL,int K){
 
 int main(){
     Node *head = NULL;
-    vector<int> arr{0,1,2,3,4};
-    int K = 3;
+    vector<int> arr{1,2,3,4,5,6,7,8};
+    int m = 3, n = 5;
     for(int i =0;i<arr.size();i++)
         createLL(head,arr[i]);
     displayLL(head);
-    head = kReverseLL(head,K);
+    head = reverseLLIterative(head,m,n);
     displayLL(head);
 }

@@ -17,7 +17,7 @@ int countWords(string str) {
     }
     */
 
-    // getline implememtation
+    // getline implementation
 	 while(getline(temp,word,' ')) {
         if(!word.empty()) {
             freq[word]++;

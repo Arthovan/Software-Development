@@ -1,4 +1,4 @@
-/* Fast Exponentiation :     Lets say a =3 and power is 5 => 3^5 is the input and convert it as 3^(101), where 101 is the binary representation of 5
+/* Fast Exponentiation :     Lets say a = 3 and power is 5 => 3^5 is the input and convert it as 3^(101), where 101 is the binary representation of 5
                         Where we need to start a "count" variable with an initial value as 1
                         during 1st iteration, if first bit value valid, multiply "count" variable with 3, else do nothing. Then multiply a =a*a, shift n one time 
                         during 2nd iteration, if second bit value valid, multiply "count" variable with 3, else do nothing. Then multiply a =a*a, shift n one time 

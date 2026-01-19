@@ -45,7 +45,7 @@ void displayLL(Node *headDisplayLL){
 
 int getMid(Node *head){
     //Complete this function to return data middle node
-    Node *fastPtr=head, *slowPtr=head;
+    Node *fastPtr = head, *slowPtr = head;
     while(fastPtr != NULL and fastPtr->next != NULL and fastPtr->next->next != NULL){
         fastPtr = fastPtr->next->next;
         slowPtr = slowPtr->next;

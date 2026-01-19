@@ -473,7 +473,7 @@ void bakePizza(std::string topping1,std::string topping2)
     //  Array   =   An array is an data structure that can hold multiple values of same data type in contiguos location
     //              Values are accessed by an index number
     //              "Its same as like variable that holds multiple values"
-int main(){
+int main() {
     //  if we are gonna set the array variable during array declaration then we dont need to set the indices value of the array. 
     //  If we are gonna set variable later than we need to specify indices value
     std::string cars[] = {"Corvette", "BMW", "Mustang"}; // here we didnt set the indices value

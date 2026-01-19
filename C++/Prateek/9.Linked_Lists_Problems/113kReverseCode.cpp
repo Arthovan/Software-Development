@@ -50,7 +50,7 @@ void reverseLLIterative(Node* &headLL){
 Node* kReverseLL(Node *&headLL,int K){
     Node *previouLL = NULL, *nextLL = NULL, *currentLL = headLL;
     int cnt = 1;
-    while(currentLL != NULL and cnt<=K){
+    while(currentLL != NULL and cnt <= K){
         nextLL = currentLL->next;
         currentLL->next = previouLL;
 

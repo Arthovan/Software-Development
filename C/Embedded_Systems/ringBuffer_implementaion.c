@@ -4,15 +4,15 @@
 
 #define RING_BUFFER_SIZE 8   // must be > 0
 
-typedef struct {
+typedef struct RingBuffer{
     uint8_t buffer[RING_BUFFER_SIZE];  // storage
     uint32_t head;   // next write index
     uint32_t tail;   // next read index
     uint32_t count;  // number of elements currently stored
-} RingBuffer;
+} RingBuffer_t;
 
 // Initialize the ring buffer
-void RingBuffer_Init(RingBuffer *rb)
+void RingBuffer_Init(RingBuffer_t *rb)
 {
     rb->head = 0;
     rb->tail = 0;
@@ -20,19 +20,19 @@ void RingBuffer_Init(RingBuffer *rb)
 }
 
 // Check if buffer is full
-bool RingBuffer_IsFull(RingBuffer *rb)
+bool RingBuffer_IsFull(RingBuffer_t *rb)
 {
     return rb->count == RING_BUFFER_SIZE;
 }
 
 // Check if buffer is empty
-bool RingBuffer_IsEmpty(RingBuffer *rb)
+bool RingBuffer_IsEmpty(RingBuffer_t *rb)
 {
     return rb->count == 0;
 }
 
 // Add element (returns false if full)
-bool RingBuffer_Put(RingBuffer *rb, uint8_t data)
+bool RingBuffer_Put(RingBuffer_t *rb, uint8_t data)
 {
     if (RingBuffer_IsFull(rb))
         return false; // Buffer full
@@ -44,7 +44,7 @@ bool RingBuffer_Put(RingBuffer *rb, uint8_t data)
 }
 
 // Get element (returns false if empty)
-bool RingBuffer_Get(RingBuffer *rb, uint8_t *data)
+bool RingBuffer_Get(RingBuffer_t *rb, uint8_t *data)
 {
     if (RingBuffer_IsEmpty(rb))
         return false; // Buffer empty
@@ -56,14 +56,14 @@ bool RingBuffer_Get(RingBuffer *rb, uint8_t *data)
 }
 
 // Get number of stored elements
-uint32_t RingBuffer_Count(RingBuffer *rb)
+uint32_t RingBuffer_Count(RingBuffer_t *rb)
 {
     return rb->count;
 }
 
 int main(void)
 {
-    RingBuffer rb;
+    RingBuffer_t rb;
     RingBuffer_Init(&rb);
 
     // Push some data

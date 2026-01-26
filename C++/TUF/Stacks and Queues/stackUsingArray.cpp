@@ -1,119 +1,85 @@
-#include<iostream>
-#include<vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// with vector implementation 
-class VectorStack {
-    private:
-    vector<int> arr{};
+class ArrayStack {
+private:
+    // Array to hold elements
+    int* stackArray;
+    // Maximum capacity
+    int capacity; 
+     // Index of top element  
+    int topIndex;   
 
-    public:
-    void push(int val){
-        arr.push_back(val);
+public:
+    // Constructor
+    ArrayStack(int size = 1000) {
+        capacity = size;
+        stackArray = new int[capacity];
+        // Initialize stack as empty
+        topIndex = -1; 
     }
-    void pop(void){
-        arr.pop_back();
+
+    // Destructor
+    ~ArrayStack() {
+        delete[] stackArray;
     }
-    int top(void){
-        return arr.back();
+
+    // Pushes element x 
+    void push(int x) {
+        if (topIndex >= capacity - 1) {
+            cout << "Stack overflow" << endl;
+            return;
+        }
+        stackArray[++topIndex] = x;
     }
-    bool empty(void){
-        return arr.empty();
+
+    // Removes and returns top element
+    int pop() {
+        if (isEmpty()) {
+            cout << "Stack is empty" << endl;
+            // Return invalid value
+            return -1; 
+        }
+        return stackArray[topIndex--];
     }
-    int size(void){
-        return arr.size();
+
+    // Returns top element
+    int top() {
+        if (isEmpty()) {
+            cout << "Stack is empty" << endl;
+            return -1; 
+        }
+        return stackArray[topIndex];
+    }
+
+   /* Returns true if the 
+   stack is empty, false otherwise*/
+    bool isEmpty() {
+        return topIndex == -1;
     }
 };
 
-void vectorImplementaion(void) {
-    class VectorStack vSt;
-    vSt.push(9);
-    vSt.push(8);
-    vSt.push(5);
-    vSt.push(7);
-    vSt.pop();
-    vSt.pop();
-    vSt.push(10);
+// Main Function
+int main() {
+    ArrayStack stack;
+    vector<string> commands = {"ArrayStack", "push", "push", "top", "pop", "isEmpty"};
+    vector<vector<int>> inputs = {{}, {5}, {10}, {}, {}, {}};
 
-    cout<<"Size of Vector Stack is : "<<vSt.size()<<endl;
-    cout<<"Vector implementation of stack is : ";
-    while(!vSt.empty()) {
-        cout<<vSt.top()<<" ";
-        vSt.pop();
-    }
-    cout<<endl;    
-}
-
-
-// with array implementation
-class ArrayStack {
-    public:
-    int len = -1;
-    int st[10];
-
-    void push(int val){
-        if(len == 9) {
-            cout<<"Stack is Full!!!"<<endl;
-        } else {
-            len = len + 1;
-            st[len] = val;
-        }      
-    }
-    void pop(void){
-        st[len] = 0;
-        len--;
-    }
-    int top(void){
-        return st[len];
-    }
-    bool empty(void){
-        if(len >= 0){
-            return 0;
-        } else {
-            return 1;
+    for (size_t i = 0; i < commands.size(); ++i) {
+        if (commands[i] == "push") {
+            stack.push(inputs[i][0]);
+            cout << "null ";
+        } else if (commands[i] == "pop") {
+            cout << stack.pop() << " ";
+        } else if (commands[i] == "top") {
+            cout << stack.top() << " ";
+        } else if (commands[i] == "isEmpty") {
+            cout << (stack.isEmpty() ? "true" : "false") << " ";
+        } else if (commands[i] == "ArrayStack") {
+            cout << "null ";
         }
     }
-    int size(void){
-        return len+1;
-    }
+    std::cout<<std::endl;
 
-};
-void arrayImplementaion() {
-    class ArrayStack aSt;
-    aSt.push(9);
-    aSt.push(8);
-    aSt.push(5);
-    aSt.push(7);
-    aSt.push(1);
-    aSt.push(3);
-    aSt.push(2);
-    aSt.push(4);
-    aSt.push(6);
-    aSt.push(10);
-    aSt.push(19);
-    aSt.push(56);
-    aSt.push(78);
-    aSt.pop();
-    aSt.pop();
-    aSt.push(189);
-
-    cout<<"Size of Array Stack is : "<<aSt.size()<<endl;
-    cout<<"Array implementation of stack is : ";
-    int temp = 0;
-    /*while(temp <= aSt.len) {
-        cout<<aSt.st[temp]<<" ";
-        temp++;
-    }*/
-    while(!aSt.empty()) {
-        cout<<aSt.top()<<" ";
-        aSt.pop();
-    }
-    cout<<endl;    
-}
-
-int main(int argc, char*argv[]) {
-    vectorImplementaion();
-    arrayImplementaion();
     return 0;
 }

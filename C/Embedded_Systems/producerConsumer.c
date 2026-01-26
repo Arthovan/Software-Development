@@ -16,8 +16,8 @@ typedef void (*task_func)(int);
 typedef struct RingBuffer{
     task_func buffer[BUFFER_SIZE];
     int args[BUFFER_SIZE];
-    int head;   // Next write position
-    int tail;   // Next read position
+    int head;   // Next write position, just like "in" in bounded buffer
+    int tail;   // Next read position, just like "out" in bounded buffer
     int count;  // Number of items in the buffer
     bool done;  // Flag to signal no more tasks will be produced
     pthread_mutex_t mutex;
@@ -40,30 +40,30 @@ void square_task(int n) {
 
 // ------------------ Ring Buffer Operations ------------------
 /* Initialize the ring buffer */
-void init_buffer(RingBuffer *q) {
+void init_buffer(RingBuffer_t *q) {
     q->head = q->tail = q->count = 0;
     q->done = false;
     pthread_mutex_init(&q->mutex, NULL);
-    pthread_cond_init(&q->not_full, NULL)
+    pthread_cond_init(&q->not_full, NULL);
     pthread_cond_init(&q->not_empty, NULL);
 }
 
 /* Destroy the ring buffer */
-void destroy_buffer(RingBuffer *q) {
+void destroy_buffer(RingBuffer_t *q) {
     pthread_mutex_destroy(&q->mutex);
     pthread_cond_destroy(&q->not_full);
     pthread_cond_destroy(&q->not_empty);
 }
 
 /* Write data into the ring buffer (producer) */
-void enqueue(RingBuffer *q, task_func func, int arg) {
+void enqueue(RingBuffer_t *q, task_func func, int arg) {
     pthread_mutex_lock(&q->mutex);
     while (q->count == BUFFER_SIZE)
         pthread_cond_wait(&q->not_full, &q->mutex);
 
-    q->buffer[q->tail] = func;
-    q->args[q->tail] = arg;
-    q->tail = (q->tail + 1) % BUFFER_SIZE;
+    q->buffer[q->head] = func;
+    q->args[q->head] = arg;
+    q->head = (q->head + 1) % BUFFER_SIZE;
     q->count++;
 
     pthread_cond_signal(&q->not_empty);
@@ -71,7 +71,7 @@ void enqueue(RingBuffer *q, task_func func, int arg) {
 }
 
 /* Read data from the ring buffer (consumer) */
-bool dequeue(RingBuffer *q, task_func *func, int *arg) {
+bool dequeue(RingBuffer_t *q, task_func *func, int *arg) {
     pthread_mutex_lock(&q->mutex);
     while (q->count == 0 && !q->done)
         pthread_cond_wait(&q->not_empty, &q->mutex);
@@ -81,9 +81,9 @@ bool dequeue(RingBuffer *q, task_func *func, int *arg) {
         return false; // No more tasks, and producers finished
     }
 
-    *func = q->buffer[q->head];
-    *arg = q->args[q->head];
-    q->head = (q->head + 1) % BUFFER_SIZE;
+    *func = q->buffer[q->tail];
+    *arg = q->args[q->tail];
+    q->tail = (q->tail + 1) % BUFFER_SIZE;
     q->count--;
 
     pthread_cond_signal(&q->not_full);

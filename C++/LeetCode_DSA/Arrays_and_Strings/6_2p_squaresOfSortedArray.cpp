@@ -27,7 +27,7 @@ using namespace std;
 vector<int> sortedSquares(vector<int> &num){
     int j = num.size()-1;
     int i = 0,left = 0, right = j;    
-    vector<int>temp(num.size(),0);// We need a temp array of same size as nums
+    vector<int>temp(num.size(),0);  // We need a temp array of same size as nums
     for(int i = j; i > 0; i--){
         if(abs(num[left]) > abs(num[right])){
             temp[i] = num[left] * num[left];

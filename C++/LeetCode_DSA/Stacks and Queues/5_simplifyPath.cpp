@@ -42,7 +42,7 @@ string simplifyPath(string path) {
     stringstream ss(path);
     string temp;
     string result;
-    while(getline(ss, temp, '/')) {
+    while(getline(ss, temp, '/')) { // where '/' is the delimiter where it will stop, if not '/n' is the default delimiter
         if(temp == ".."){
             if(!stack.empty())
                 stack.pop_back();

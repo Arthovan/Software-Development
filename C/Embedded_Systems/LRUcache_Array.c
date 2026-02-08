@@ -7,6 +7,7 @@ Cache replacement algorithms are efficiently designed to replace the cache when 
     *   put (key, value): Update the value of the key if that key exists, Otherwise, add a key-value pair to the cache. If the number of keys exceeds the capacity of the LRU cache then dismiss the least recently used key. 
     Reference : https://www.geeksforgeeks.org/system-design/lru-cache-implementation/  */
 
+    This below code from chat gpt so need to work on it later on, I think its a flaw code
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>

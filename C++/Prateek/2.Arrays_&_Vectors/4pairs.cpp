@@ -29,18 +29,18 @@ void bruteForce(vector<int> arr,int size,int number){
     }
 }
 
-// using set establishing the pairs
-vector<int> pairSum(vector<int> a,int tar){
+// using set establishing the pairs (Google Question)
+vector<int> pairSum(vector<int> a,int target){
     vector<int> result;
-    unordered_set<int> se;
+    unordered_set<int> set;
     for(int i=0;i<a.size();i++){
-        int x = tar - a[i];
-        if(se.find(x) != se.end()){
-            result.push_back(x);
+        int difference = target - a[i];
+        if(set.find(difference) != set.end()){
+            result.push_back(difference);
             result.push_back(a[i]);
             return result;
         }
-        se.insert(a[i]);
+        set.insert(a[i]);
     }
     return result;
 }

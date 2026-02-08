@@ -15,22 +15,22 @@ This example is implemented with the below considerations
 #include<unistd.h>
 
 typedef struct rwlock_{
-    pthread_mutex_t mutex;
-    pthread_cond_t readers;  // Condition variable for readers
-    pthread_cond_t writers;  // Condition variable for writers
     int active_readers;      // Number of readers currently holding the lock
     int active_writers;      // Number of writers currently holding the lock (0 or 1)
     int waiting_writers;     // Number of writers waiting
+    pthread_mutex_t mutex;
+    pthread_cond_t readers;  // Condition variable for readers
+    pthread_cond_t writers;  // Condition variable for writers
 }rwlock_t;
 
 /* Initialize the read-write lock */
 void rwlock_init(rwlock_t *rw) {
-    pthread_mutex_init(&rw->mutex, NULL);
-    pthread_cond_init(&rw->readers, NULL);
-    pthread_cond_init(&rw->writers, NULL);
     rw->active_readers = 0;
     rw->active_writers = 0;
     rw->waiting_writers = 0;
+    pthread_mutex_init(&rw->mutex, NULL);
+    pthread_cond_init(&rw->readers, NULL);
+    pthread_cond_init(&rw->writers, NULL);
 }
 
 /* Acquire read lock */

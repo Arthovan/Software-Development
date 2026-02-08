@@ -26,9 +26,9 @@ void bubbleSort(int *a,int size){
         flag = 0;
         for(j=0; j<size-1-i; j++){    //  after every 1 inner forloop 1 element is sorted, next time 2, after that 3, so it follows i. So we have used size-1-i
             if(a[j]>a[j+1]){
-            temp = a[j];
-            a[j] = a[j+1];
-            a[j+1] = temp;
+                temp = a[j];
+                a[j] = a[j+1];
+                a[j+1] = temp;
             }
         }
         if(flag == 0)   //  This means no sorting happened in the first loop and elements are already in the sorted order

@@ -119,6 +119,9 @@ clean:
 This Makefile compiles both `main.cc` and `print.cc` into object files, and then links them to create the final executable.
 In larger projects, object files are usually compiled separately and linked later—this is closer to real project structure.
 
+#### Note: 
+`#pragma once` is a non-standard but widely supported preprocessor directive placed at the top of header files. Its purpose is to ensure that the header file is included only once during a single compilation (translation unit), effectively preventing duplicate definitions and compiler errors when multiple files include the same header.
+
 ## Separate Target for object and source: 
 (Same source files as Example 3)
 
